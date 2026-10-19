@@ -15,7 +15,6 @@
       --soft-white: #F8FAF9;
       --glass-bg: rgba(7, 24, 48, 0.45);
       --glass-border: rgba(255, 255, 255, 0.25);
-      --shadow-color: rgba(0, 0, 0, 0.6);
     }
 
     * {
@@ -37,20 +36,16 @@
     /* 牆面與動態背景 */
     .bg-stage {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
       overflow: hidden;
     }
 
     .bg-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       opacity: 0;
       transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
       background-size: cover;
@@ -58,32 +53,23 @@
       transform: scale(1.02);
     }
 
-    .bg-layer.active {
-      opacity: 1;
-    }
+    .bg-layer.active { opacity: 1; }
 
     .bg-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: radial-gradient(circle at center, rgba(3, 16, 32, 0.25) 0%, rgba(2, 10, 20, 0.8) 100%);
       z-index: 2;
     }
 
-    .bg-svg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .bg-svg { width: 100%; height: 100%; object-fit: cover; }
 
     /* 主版面佈局 */
     .clock-app-container {
       position: relative;
       z-index: 10;
-      width: 100vw;
-      height: 100vh;
+      width: 100vw; height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -106,24 +92,9 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .official-logo-box {
-      height: 85px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 0 15px rgba(245, 166, 35, 0.5));
-    }
-
-    .brand-titles {
-      display: flex;
-      flex-direction: column;
-    }
+    .brand-section { display: flex; align-items: center; gap: 24px; }
+    .official-logo-box { height: 85px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 0 15px rgba(245, 166, 35, 0.5)); }
+    .brand-titles { display: flex; flex-direction: column; }
 
     .brand-title-main {
       font-size: clamp(2.5rem, 4.2vh, 3.8rem);
@@ -144,22 +115,9 @@
       margin-top: 2px;
     }
 
-    .date-lunar-display {
-      text-align: right;
-    }
-
-    .date-text {
-      font-size: clamp(1.8rem, 3.2vh, 2.6rem);
-      font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: 1px;
-    }
-
-    .lunar-text {
-      font-size: clamp(1.2rem, 2vh, 1.6rem);
-      color: #D1E3F8;
-      margin-top: 2px;
-    }
+    .date-lunar-display { text-align: right; }
+    .date-text { font-size: clamp(1.8rem, 3.2vh, 2.6rem); font-weight: 700; color: #FFFFFF; letter-spacing: 1px; }
+    .lunar-text { font-size: clamp(1.2rem, 2vh, 1.6rem); color: #D1E3F8; margin-top: 2px; }
 
     /* 核心時間框 */
     .main-clock-card {
@@ -181,12 +139,8 @@
 
     .time-wrapper {
       position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
+      width: 100%; height: 100%;
+      display: flex; justify-content: center; align-items: center; gap: 15px;
     }
 
     .time-hm {
@@ -196,12 +150,9 @@
       line-height: 0.75;
       letter-spacing: -0.01em;
       color: #FFFFFF;
-      text-shadow: 
-        0 0 40px rgba(255, 255, 255, 0.25),
-        0 12px 35px rgba(0, 0, 0, 0.85);
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.25), 0 12px 35px rgba(0, 0, 0, 0.85);
       white-space: nowrap;
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
     }
 
     .colon {
@@ -212,38 +163,32 @@
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
     }
 
-    /* 點擊切換 AM/PM 與 24H 制的互動標籤 */
+    /* 12H/24H 互動標籤（層級提升與事件確保） */
     .ampm-tag {
       position: absolute;
-      top: 2.5vh;
-      left: 2.5vw;
+      top: 2.5vh; left: 2.5vw;
       font-size: clamp(1.8rem, 4.5vh, 3vw);
       font-weight: 900;
       color: var(--accent-gold);
-      background: rgba(0, 0, 0, 0.5);
-      padding: 8px 24px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(245, 166, 35, 0.6);
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 28px;
+      border-radius: 14px;
+      border: 2px solid rgba(245, 166, 35, 0.8);
       letter-spacing: 2px;
       cursor: pointer;
+      z-index: 60;
+      pointer-events: auto;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
     .ampm-tag:hover {
       background: var(--primary-blue);
       color: #FFFFFF;
-      transform: scale(1.08);
+      transform: scale(1.1);
     }
 
-    .alarm-icons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-    }
-
+    .alarm-icons-container { display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; }
     .alarm-icon-item {
       font-size: clamp(2.5rem, 6vh, 5rem);
       animation: pulseAlarm 2s infinite alternate;
@@ -252,7 +197,6 @@
       transition: all 0.2s ease;
     }
 
-    /* 鬧鐘響鈴時強烈閃動與 3 倍放大 */
     .alarm-icon-item.ringing {
       font-size: clamp(7.5rem, 18vh, 15vw) !important;
       animation: alarmRinging 0.15s infinite alternate !important;
@@ -260,57 +204,25 @@
       z-index: 50;
     }
 
-    @keyframes alarmRinging {
-      0% { transform: scale(1) rotate(-15deg); opacity: 1; }
-      100% { transform: scale(1.2) rotate(15deg); opacity: 0.8; }
-    }
-
-    @keyframes pulseAlarm {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(1.18); opacity: 1; }
-    }
-
-    @keyframes pulseColon {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.25; }
-    }
+    @keyframes alarmRinging { 0% { transform: scale(1) rotate(-15deg); opacity: 1; } 100% { transform: scale(1.2) rotate(15deg); opacity: 0.8; } }
+    @keyframes pulseAlarm { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.18); opacity: 1; } }
+    @keyframes pulseColon { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
     .seconds-badge {
-      position: absolute;
-      bottom: 2vh;
-      right: 2.5vw;
+      position: absolute; bottom: 2vh; right: 2.5vw;
       background: rgba(0, 20, 45, 0.75);
       border: 1.5px solid var(--accent-gold);
       border-radius: 16px;
       padding: 0.4vh 1.8vw;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
+      display: flex; align-items: baseline; gap: 8px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.6);
     }
 
-    .seconds-label {
-      font-size: 1.2rem;
-      color: var(--accent-gold);
-      font-weight: 700;
-    }
-
-    .time-sec {
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: clamp(3rem, 8vh, 6.5vw);
-      font-weight: 700;
-      color: #FFFFFF;
-      line-height: 1;
-    }
+    .seconds-label { font-size: 1.2rem; color: var(--accent-gold); font-weight: 700; }
+    .time-sec { font-family: 'Chakra Petch', sans-serif; font-size: clamp(3rem, 8vh, 6.5vw); font-weight: 700; color: #FFFFFF; line-height: 1; }
 
     /* 底部區域 */
-    footer {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-    }
+    footer { width: 100%; display: flex; justify-content: space-between; align-items: center; position: relative; }
 
     .quote-box {
       width: 100%;
@@ -321,281 +233,99 @@
       backdrop-filter: blur(14px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.4);
       min-height: 13vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      display: flex; flex-direction: column; justify-content: center;
     }
 
-    .quote-text {
-      font-size: clamp(1.8rem, 3.2vh, 2.6rem);
-      font-weight: 700;
-      color: #E2EFFC;
-      letter-spacing: 1.5px;
-      line-height: 1.35;
-      transition: opacity 0.5s ease;
-    }
+    .quote-text { font-size: clamp(1.8rem, 3.2vh, 2.6rem); font-weight: 700; color: #E2EFFC; letter-spacing: 1.5px; line-height: 1.35; transition: opacity 0.5s ease; }
+    .announcement-text { font-size: clamp(2.8rem, 5vh, 4.2rem); font-weight: 900; color: var(--warm-amber); margin-top: 8px; letter-spacing: 2px; text-shadow: 0 3px 12px rgba(0,0,0,0.8); line-height: 1.2; }
 
-    .announcement-text {
-      font-size: clamp(2.8rem, 5vh, 4.2rem);
-      font-weight: 900;
-      color: var(--warm-amber);
-      margin-top: 8px;
-      letter-spacing: 2px;
-      text-shadow: 0 3px 12px rgba(0,0,0,0.8);
-      line-height: 1.2;
-    }
-
-    /* 自訂公告全版模式（字體放大 250% + 低頻輕微閃爍） */
-    .quote-box.custom-active .quote-text {
-      display: none;
-    }
-
+    .quote-box.custom-active .quote-text { display: none; }
     .quote-box.custom-active .announcement-text {
       font-size: clamp(4.5rem, 9.5vh, 8.5rem);
-      color: #FFD580;
-      margin-top: 0;
-      text-align: center;
+      color: #FFD580; margin-top: 0; text-align: center;
       animation: slowBlink 3s infinite ease-in-out;
     }
 
-    @keyframes slowBlink {
-      0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255, 213, 128, 0.8); }
-      50% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 213, 128, 0.2); }
-    }
+    @keyframes slowBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255, 213, 128, 0.8); } 50% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 213, 128, 0.2); } }
 
-    /* 螢幕最右下角：純右箭頭背景切換鈕 */
+    /* 右下角純右箭頭按鈕 */
     .bg-switch-btn {
-      position: absolute;
-      right: 1.5vw;
-      bottom: 1.5vh;
-      z-index: 30;
-      background: rgba(0, 30, 60, 0.75);
-      border: 2px solid var(--accent-gold);
-      color: var(--accent-gold);
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      position: absolute; right: 1.5vw; bottom: 1.5vh; z-index: 30;
+      background: rgba(0, 30, 60, 0.75); border: 2px solid var(--accent-gold); color: var(--accent-gold);
+      width: 52px; height: 52px; border-radius: 50%;
+      cursor: pointer; font-size: 1.8rem; font-weight: bold;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       transition: all 0.3s ease;
     }
 
-    .bg-switch-btn:hover {
-      background: var(--accent-gold);
-      color: #000;
-      transform: scale(1.12);
-    }
+    .bg-switch-btn:hover { background: var(--accent-gold); color: #000; transform: scale(1.12); }
 
     /* 控制面板選單 */
     .menu-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      background: rgba(0, 40, 80, 0.6);
-      border: 1px solid var(--glass-border);
-      color: white;
-      width: 48px;
-      height: 48px;
-      font-size: 1.4rem;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.3s;
-      opacity: 0.4;
+      position: absolute; top: 20px; right: 20px; z-index: 100;
+      background: rgba(0, 40, 80, 0.6); border: 1px solid var(--glass-border); color: white;
+      width: 48px; height: 48px; font-size: 1.4rem; border-radius: 50%;
+      cursor: pointer; display: flex; justify-content: center; align-items: center;
+      transition: all 0.3s; opacity: 0.4;
     }
 
-    .menu-btn:hover {
-      opacity: 1;
-      transform: scale(1.1);
-    }
+    .menu-btn:hover { opacity: 1; transform: scale(1.1); }
 
     .drawer {
-      position: fixed;
-      top: 0;
-      right: -450px;
-      width: 420px;
-      height: 100%;
-      background: rgba(4, 18, 36, 0.96);
-      backdrop-filter: blur(20px);
-      z-index: 90;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-      padding: 30px 25px;
-      transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      border-left: 1px solid var(--glass-border);
-      overflow-y: auto;
+      position: fixed; top: 0; right: -450px;
+      width: 420px; height: 100%;
+      background: rgba(4, 18, 36, 0.96); backdrop-filter: blur(20px);
+      z-index: 90; box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+      padding: 30px 25px; transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+      display: flex; flex-direction: column; gap: 18px;
+      border-left: 1px solid var(--glass-border); overflow-y: auto;
     }
 
-    .drawer.open {
-      right: 0;
-    }
+    .drawer.open { right: 0; }
+    .drawer-title { font-size: 1.4rem; color: var(--accent-gold); border-bottom: 2px solid rgba(245, 166, 35, 0.3); padding-bottom: 10px; }
+    .control-group { display: flex; flex-direction: column; gap: 8px; }
+    .control-label { font-size: 1rem; color: #B0C4DE; font-weight: bold; }
+    .btn-row { display: flex; gap: 8px; }
+    .btn { flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+    .btn.active, .btn:hover { background: var(--primary-blue); border-color: var(--accent-gold); color: var(--accent-gold); }
 
-    .drawer-title {
-      font-size: 1.4rem;
-      color: var(--accent-gold);
-      border-bottom: 2px solid rgba(245, 166, 35, 0.3);
-      padding-bottom: 10px;
-    }
+    .input-field, .select-field { width: 100%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; border-radius: 8px; font-size: 0.95rem; }
+    .select-field option { background: #041224; color: white; }
+    .field-hint { font-size: 0.8rem; color: #8CA0B8; margin-top: -4px; }
 
-    .control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .control-label {
-      font-size: 1rem;
-      color: #B0C4DE;
-      font-weight: bold;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .btn.active, .btn:hover {
-      background: var(--primary-blue);
-      border-color: var(--accent-gold);
-      color: var(--accent-gold);
-    }
-
-    .input-field, .select-field {
-      width: 100%;
-      padding: 10px;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid var(--glass-border);
-      color: white;
-      border-radius: 8px;
-      font-size: 0.95rem;
-    }
-
-    .select-field option {
-      background: #041224;
-      color: white;
-    }
-
-    .field-hint {
-      font-size: 0.8rem;
-      color: #8CA0B8;
-      margin-top: -4px;
-    }
-
-    .alarm-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 140px;
-      overflow-y: auto;
-    }
-
-    .alarm-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.08);
-      padding: 8px 12px;
-      border-radius: 8px;
-      border-left: 3px solid var(--accent-gold);
-    }
-
-    .alarm-time-label {
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: #FFF;
-    }
-
-    .alarm-delete-btn {
-      background: #ff4d4d;
-      border: none;
-      color: white;
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
+    .alarm-list { display: flex; flex-direction: column; gap: 8px; max-height: 140px; overflow-y: auto; }
+    .alarm-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--accent-gold); }
+    .alarm-time-label { font-size: 0.95rem; font-weight: bold; color: #FFF; }
+    .alarm-delete-btn { background: #ff4d4d; border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
 
     /* 鬧鐘響鈴 Modal */
     .alarm-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(2, 16, 35, 0.96);
-      border: 3px solid var(--accent-gold);
-      box-shadow: 0 0 50px rgba(245, 166, 35, 0.6);
-      padding: 40px;
-      border-radius: 24px;
-      z-index: 200;
-      text-align: center;
-      display: none;
-      opacity: 0;
-      transition: all 0.3s ease;
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(2, 16, 35, 0.96); border: 3px solid var(--accent-gold);
+      box-shadow: 0 0 50px rgba(245, 166, 35, 0.6); padding: 40px; border-radius: 24px;
+      z-index: 200; text-align: center; display: none; opacity: 0; transition: all 0.3s ease;
     }
 
-    .alarm-modal.active {
-      display: block;
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .alarm-modal-title {
-      font-size: 3rem;
-      color: var(--accent-gold);
-      margin-bottom: 15px;
-    }
-
-    .alarm-modal-desc {
-      font-size: 2rem;
-      color: #FFF;
-      margin-bottom: 25px;
-    }
+    .alarm-modal.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .alarm-modal-title { font-size: 3rem; color: var(--accent-gold); margin-bottom: 15px; }
+    .alarm-modal-desc { font-size: 2rem; color: #FFF; margin-bottom: 25px; }
   </style>
 </head>
 <body>
 
-  <!-- 控制面板觸發鈕 -->
   <button class="menu-btn" id="menuToggle">⚙️</button>
 
-  <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
     <div class="drawer-title">顯示與鬧鐘設定</div>
 
-    <!-- 鬧鐘與鈴聲選擇區 -->
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定</div>
       <div class="btn-row" style="gap:5px;">
-        <select id="alarmPeriodSelect" class="select-field" style="flex:1.2; display:none;">
-          <option value="AM">AM 上午</option>
-          <option value="PM">PM 下午</option>
-        </select>
         <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
         <input type="text" id="alarmLabelInput" class="input-field" placeholder="範例：晨禱提醒 / 食物箱發放" style="flex:2.5;">
       </div>
-      <div class="field-hint" id="alarmTimeHint">時間格式範例：07:30 或 14:00</div>
+      <div class="field-hint">選擇發響時間 (系統自動轉換儲存)</div>
       
       <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲與持續秒數</div>
       <div class="btn-row" style="gap:5px;">
@@ -616,7 +346,6 @@
       </div>
 
       <button class="btn" id="btnAddAlarm" style="background:var(--primary-blue); color:var(--accent-gold); margin-top: 5px;">＋ 新增鬧鐘</button>
-      
       <div class="alarm-list" id="alarmList"></div>
     </div>
 
@@ -630,81 +359,48 @@
     </div>
   </div>
 
-  <!-- 鬧鐘響鈴提示 Modal -->
   <div class="alarm-modal" id="alarmModal">
     <div class="alarm-modal-title">⏰ 鬧鐘提醒</div>
     <div class="alarm-modal-desc" id="alarmModalDesc">時間到了！</div>
     <button class="btn" id="btnCloseAlarm" style="background: var(--accent-gold); color: #000; font-size: 1.5rem; padding: 10px 30px;">關閉鬧鐘</button>
   </div>
 
-  <!-- 動態背景層 -->
   <div class="bg-stage">
     <div class="bg-layer active" id="bg1">
       <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="bgG1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#021B38"/>
-            <stop offset="50%" stop-color="#003366"/>
-            <stop offset="100%" stop-color="#00152B"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bgG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#021B38"/><stop offset="50%" stop-color="#003366"/><stop offset="100%" stop-color="#00152B"/></linearGradient></defs>
         <rect width="100%" height="100%" fill="url(#bgG1)"/>
         <circle cx="960" cy="540" r="480" fill="none" stroke="rgba(245, 166, 35, 0.08)" stroke-width="2"/>
         <path d="M 0,800 Q 480,700 960,850 T 1920,750 L 1920,1080 L 0,1080 Z" fill="rgba(0, 82, 155, 0.3)"/>
         <path d="M 0,850 Q 550,950 1100,820 T 1920,900 L 1920,1080 L 0,1080 Z" fill="rgba(245, 166, 35, 0.12)"/>
       </svg>
     </div>
-
     <div class="bg-layer" id="bg2">
       <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="bgG2" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#0A2540"/>
-            <stop offset="60%" stop-color="#004080"/>
-            <stop offset="100%" stop-color="#051329"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bgG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A2540"/><stop offset="60%" stop-color="#004080"/><stop offset="100%" stop-color="#051329"/></linearGradient></defs>
         <rect width="100%" height="100%" fill="url(#bgG2)"/>
         <path d="M-100,200 C 400,100 800,500 1920,100 L 1920,1080 L -100,1080 Z" fill="rgba(255, 152, 0, 0.08)"/>
         <circle cx="300" cy="300" r="280" fill="rgba(0, 82, 155, 0.25)"/>
       </svg>
     </div>
-
     <div class="bg-layer" id="bg3">
       <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="bgG3" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#001F3F"/>
-            <stop offset="50%" stop-color="#002D5A"/>
-            <stop offset="100%" stop-color="#081426"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bgG3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#001F3F"/><stop offset="50%" stop-color="#002D5A"/><stop offset="100%" stop-color="#081426"/></linearGradient></defs>
         <rect width="100%" height="100%" fill="url(#bgG3)"/>
         <polygon points="0,0 1920,1080 0,1080" fill="rgba(0, 82, 155, 0.15)"/>
       </svg>
     </div>
-
     <div class="bg-layer" id="bg4">
       <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="bgG4" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#051A30"/>
-            <stop offset="50%" stop-color="#032D55"/>
-            <stop offset="100%" stop-color="#010D1B"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bgG4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#051A30"/><stop offset="50%" stop-color="#032D55"/><stop offset="100%" stop-color="#010D1B"/></linearGradient></defs>
         <rect width="100%" height="100%" fill="url(#bgG4)"/>
         <circle cx="1600" cy="200" r="400" fill="rgba(245, 166, 35, 0.06)"/>
       </svg>
     </div>
-    
     <div class="bg-overlay"></div>
   </div>
 
-  <!-- 主介面 -->
   <div class="clock-app-container">
-    
-    <!-- 頂部標題列 -->
     <header>
       <div class="brand-section">
         <div class="official-logo-box">
@@ -731,55 +427,43 @@
             </g>
           </svg>
         </div>
-
         <div class="brand-titles">
           <span class="brand-title-main">社團法人中華安得烈慈善協會</span>
           <span class="brand-title-sub">ANDREW CHARITY ASSOCIATION</span>
         </div>
       </div>
-
       <div class="date-lunar-display">
         <div class="date-text" id="dateText">2026年10月19日 星期一</div>
         <div class="lunar-text" id="lunarText">農曆丙午年九月十日</div>
       </div>
     </header>
 
-    <!-- 核心時間框 -->
     <main class="main-clock-card">
-      <!-- 點擊 AM/PM 標籤即可直接切換 12/24 小時制 -->
       <div class="ampm-tag" id="ampmTag" title="點擊切換 12/24 小時制">24H</div>
-      
       <div class="time-wrapper">
         <div class="time-hm">
           <span id="hours">09</span>
           <span class="colon">:</span>
           <span id="minutes">37</span>
         </div>
-        
         <div class="alarm-icons-container" id="alarmIconsContainer"></div>
       </div>
-
       <div class="seconds-badge">
         <span class="seconds-label">SEC</span>
         <span class="time-sec" id="seconds">00</span>
       </div>
     </main>
 
-    <!-- 底部：經文輪播與公告 -->
     <footer>
       <div class="quote-box" id="quoteBox">
         <div class="quote-text" id="quoteText">「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1</div>
         <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
       </div>
-
-      <!-- 大螢幕最右下角：純右箭頭背景切換鈕 -->
       <button class="bg-switch-btn" id="btnNextBgGlobal" title="切換下張背景與經文">➔</button>
     </footer>
-
   </div>
 
   <script>
-    // --- 50 則《靈命日糧》精選經文數據庫 ---
     const dailyBreadVerses = [
       "「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1",
       "「施比受更為有福。各人要隨本心所酌定的，捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
@@ -833,68 +517,40 @@
       "「你們要嘗嘗主恩的滋味，便知祂是美善；投靠祂的人有福了！」— 詩篇 34:8"
     ];
 
-    // --- 狀態控制 ---
-    let is24Hour = true;
+    let is24Hour = true; // 預設 24H 制
     let autoRotate = true;
     let bgIndex = 0;
-    const cycleDuration = 30; // 30 秒輪播
+    const cycleDuration = 30;
     let secondsElapsed = 0;
-    let alarms = []; // 鬧鐘陣列 [{ id, time24, label, sound, duration, triggered }]
+    let alarms = [];
     let activeRingingTimer = null;
     let activeRingingAlarmId = null;
     let isCustomAnnouncementActive = false;
 
-    // Web Audio API 音效合成器
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playAlarmSound(type) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx.state === 'suspended') { audioCtx.resume(); }
       const now = audioCtx.currentTime;
-
       switch(type) {
-        case 'sound1':
-          playTone(523.25, now, 0.15, 'sine');
-          playTone(659.25, now + 0.15, 0.15, 'sine');
-          playTone(783.99, now + 0.3, 0.3, 'sine');
-          break;
-        case 'sound2':
-          playTone(440, now, 0.6, 'triangle');
-          playTone(554.37, now + 0.05, 0.6, 'triangle');
-          playTone(659.25, now + 0.1, 0.6, 'triangle');
-          break;
-        case 'sound3':
-          for(let i=0; i<4; i++) {
-            playTone(880, now + i*0.12, 0.08, 'sawtooth');
-          }
-          break;
-        case 'sound4':
-          playTone(329.63, now, 1.2, 'sine');
-          playTone(261.63, now + 0.4, 1.5, 'sine');
-          break;
-        case 'sound5':
-          playTone(1046.50, now, 0.08, 'square');
-          playTone(1046.50, now + 0.15, 0.08, 'square');
-          playTone(1046.50, now + 0.3, 0.15, 'square');
-          break;
+        case 'sound1': playTone(523.25, now, 0.15, 'sine'); playTone(659.25, now + 0.15, 0.15, 'sine'); playTone(783.99, now + 0.3, 0.3, 'sine'); break;
+        case 'sound2': playTone(440, now, 0.6, 'triangle'); playTone(554.37, now + 0.05, 0.6, 'triangle'); playTone(659.25, now + 0.1, 0.6, 'triangle'); break;
+        case 'sound3': for(let i=0; i<4; i++) playTone(880, now + i*0.12, 0.08, 'sawtooth'); break;
+        case 'sound4': playTone(329.63, now, 1.2, 'sine'); playTone(261.63, now + 0.4, 1.5, 'sine'); break;
+        case 'sound5': playTone(1046.50, now, 0.08, 'square'); playTone(1046.50, now + 0.15, 0.08, 'square'); playTone(1046.50, now + 0.3, 0.15, 'square'); break;
       }
     }
 
     function playTone(freq, startTime, duration, type='sine') {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, startTime);
+      osc.type = type; osc.frequency.setValueAtTime(freq, startTime);
       gain.gain.setValueAtTime(0.3, startTime);
       gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + duration);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(startTime); osc.stop(startTime + duration);
     }
 
-    // --- DOM 元素 ---
     const hoursEl = document.getElementById('hours');
     const minutesEl = document.getElementById('minutes');
     const secondsEl = document.getElementById('seconds');
@@ -907,36 +563,7 @@
     const alarmList = document.getElementById('alarmList');
     const alarmModal = document.getElementById('alarmModal');
     const alarmModalDesc = document.getElementById('alarmModalDesc');
-    const alarmPeriodSelect = document.getElementById('alarmPeriodSelect');
-    const alarmTimeHint = document.getElementById('alarmTimeHint');
 
-    // 更新鬧鐘輸入 UI 引導
-    function updateAlarmInputUI() {
-      if (is24Hour) {
-        alarmPeriodSelect.style.display = 'none';
-        alarmTimeHint.innerText = '時間格式範例：07:30 或 14:00 (24小時制)';
-      } else {
-        alarmPeriodSelect.style.display = 'block';
-        alarmTimeHint.innerText = '時間格式範例：07:30 (請選擇 AM 上午 或 PM 下午)';
-      }
-      renderAlarms();
-    }
-
-    // 將時間轉為 24 小時制格式 HH:MM 儲存
-    function parseTo24HourFormat(timeVal, periodVal) {
-      if (!timeVal) return null;
-      let [h, m] = timeVal.split(':').map(Number);
-      if (isNaN(h) || isNaN(m)) return null;
-
-      if (!is24Hour) {
-        if (periodVal === 'PM' && h < 12) h += 12;
-        if (periodVal === 'AM' && h === 12) h = 0;
-      }
-
-      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    }
-
-    // 格式化顯示時間（依照當前 12H/24H 模式）
     function formatAlarmDisplay(time24) {
       let [h, m] = time24.split(':').map(Number);
       if (is24Hour) {
@@ -948,14 +575,12 @@
       }
     }
 
-    // --- 時間與鬧鐘監測 ---
     function updateClock() {
       const now = new Date();
       let h = now.getHours();
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
-
-      const current24HourStr = `${String(now.getHours()).padStart(2, '0')}:${m}`;
+      const current24HourStr = `${String(h).padStart(2, '0')}:${m}`;
 
       if (!is24Hour) {
         ampmTag.innerText = h >= 12 ? 'PM' : 'AM';
@@ -972,11 +597,8 @@
       const month = now.getMonth() + 1;
       const date = now.getDate();
       const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-      const dayName = days[now.getDay()];
+      dateTextEl.innerText = `${year}年${month}月${date}日 ${days[now.getDay()]}`;
 
-      dateTextEl.innerText = `${year}年${month}月${date}日 ${dayName}`;
-
-      // 鬧鐘響鈴偵測
       if (s === '00') {
         alarms.forEach(alarm => {
           if (alarm.time24 === current24HourStr && !alarm.triggered) {
@@ -986,14 +608,22 @@
       }
     }
 
+    // 核心切換切換事件監聽
+    function toggleTimeFormat(e) {
+      if (e) e.stopPropagation();
+      is24Hour = !is24Hour;
+      updateClock();
+      renderAlarms();
+    }
+
+    ampmTag.addEventListener('click', toggleTimeFormat);
+    ampmTag.addEventListener('touchstart', toggleTimeFormat, {passive: true});
+
     function triggerAlarm(alarm) {
       alarm.triggered = true;
       activeRingingAlarmId = alarm.id;
-
       const iconEl = document.getElementById(`alarm-icon-${alarm.id}`);
-      if (iconEl) {
-        iconEl.classList.add('ringing');
-      }
+      if (iconEl) iconEl.classList.add('ringing');
 
       const displayTime = formatAlarmDisplay(alarm.time24);
       alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${displayTime})` : `鬧鐘時間 (${displayTime}) 到了！`;
@@ -1005,34 +635,21 @@
       activeRingingTimer = setInterval(() => {
         playAlarmSound(alarm.sound);
         elapsedSeconds += 2;
-
-        if (elapsedSeconds >= duration) {
-          stopRinging(alarm.id);
-        }
+        if (elapsedSeconds >= duration) stopRinging(alarm.id);
       }, 2000);
     }
 
     function stopRinging(alarmId) {
-      if (activeRingingTimer) {
-        clearInterval(activeRingingTimer);
-        activeRingingTimer = null;
-      }
-
+      if (activeRingingTimer) { clearInterval(activeRingingTimer); activeRingingTimer = null; }
       const iconEl = document.getElementById(`alarm-icon-${alarmId}`);
-      if (iconEl) {
-        iconEl.classList.remove('ringing');
-      }
-
+      if (iconEl) iconEl.classList.remove('ringing');
       alarmModal.classList.remove('active');
     }
 
     document.getElementById('btnCloseAlarm').addEventListener('click', () => {
-      if (activeRingingAlarmId) {
-        stopRinging(activeRingingAlarmId);
-      }
+      if (activeRingingAlarmId) stopRinging(activeRingingAlarmId);
     });
 
-    // 渲染鬧鐘項目與數字右側圖示
     function renderAlarms() {
       alarmList.innerHTML = '';
       alarmIconsContainer.innerHTML = '';
@@ -1057,13 +674,11 @@
       });
     }
 
-    function addAlarm(timeVal, periodVal, label, sound, duration) {
-      const time24 = parseTo24HourFormat(timeVal, periodVal);
-      if (!time24) return;
-
+    function addAlarm(timeVal, label, sound, duration) {
+      if (!timeVal) return;
       alarms.push({
         id: Date.now(),
-        time24: time24,
+        time24: timeVal,
         label: label,
         sound: sound,
         duration: duration,
@@ -1078,56 +693,34 @@
       renderAlarms();
     }
 
-    // --- 點擊 AM/PM/24H 標籤切換 12/24 小時制 ---
-    ampmTag.addEventListener('click', () => {
-      is24Hour = !is24Hour;
-      updateClock();
-      updateAlarmInputUI();
-    });
-
-    // --- 隨機抽取《靈命日糧》經文 ---
     function getRandomVerse() {
-      const randomIndex = Math.floor(Math.random() * dailyBreadVerses.length);
-      return dailyBreadVerses[randomIndex];
+      return dailyBreadVerses[Math.floor(Math.random() * dailyBreadVerses.length)];
     }
 
-    // --- 背景與經文輪播 ---
     function switchBackground(index) {
       const layers = document.querySelectorAll('.bg-layer');
-      layers.forEach((layer, idx) => {
-        layer.classList.toggle('active', idx === index);
-      });
-
-      if (!isCustomAnnouncementActive) {
-        quoteTextEl.innerText = getRandomVerse();
-      }
+      layers.forEach((layer, idx) => layer.classList.toggle('active', idx === index));
+      if (!isCustomAnnouncementActive) quoteTextEl.innerText = getRandomVerse();
     }
 
     function nextBackground() {
-      const totalBgs = document.querySelectorAll('.bg-layer').length;
-      bgIndex = (bgIndex + 1) % totalBgs;
+      bgIndex = (bgIndex + 1) % document.querySelectorAll('.bg-layer').length;
       switchBackground(bgIndex);
     }
 
-    // 螢幕右下角按鈕切換背景
     document.getElementById('btnNextBgGlobal').addEventListener('click', () => {
       secondsElapsed = 0;
       nextBackground();
     });
 
-    // --- 30 秒自動輪播計時 ---
     setInterval(() => {
       updateClock();
-
       if (autoRotate) {
         secondsElapsed++;
-        if (secondsElapsed % cycleDuration === 0) {
-          nextBackground();
-        }
+        if (secondsElapsed % cycleDuration === 0) nextBackground();
       }
     }, 1000);
 
-    // --- 控制選單事件監聽 ---
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const btnFullscreen = document.getElementById('btnFullscreen');
@@ -1140,18 +733,13 @@
     const announcementInput = document.getElementById('announcementInput');
 
     menuBtn.addEventListener('click', () => drawer.classList.toggle('open'));
-
-    btnTestSound.addEventListener('click', () => {
-      playAlarmSound(alarmSoundSelect.value);
-    });
+    btnTestSound.addEventListener('click', () => playAlarmSound(alarmSoundSelect.value));
 
     btnAddAlarm.addEventListener('click', () => {
-      addAlarm(alarmTimeInput.value, alarmPeriodSelect.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
-      alarmTimeInput.value = '';
-      alarmLabelInput.value = '';
+      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
+      alarmTimeInput.value = ''; alarmLabelInput.value = '';
     });
 
-    // 輸入自訂公告時：暫停經文輪播並放大佔用整區 (250% + 低頻閃爍)
     announcementInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
       if (val !== '') {
@@ -1170,18 +758,14 @@
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         btnFullscreen.innerText = '退出全螢幕';
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-          btnFullscreen.innerText = '開啟全螢幕';
-        }
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+        btnFullscreen.innerText = '開啟全螢幕';
       }
     });
 
-    // 初始化執行
     quoteTextEl.innerText = getRandomVerse();
     updateClock();
-    updateAlarmInputUI();
   </script>
 </body>
 </html>
