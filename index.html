@@ -212,6 +212,30 @@
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
     }
 
+    /* 點擊切換 AM/PM 與 24H 制的互動標籤 */
+    .ampm-tag {
+      position: absolute;
+      top: 2.5vh;
+      left: 2.5vw;
+      font-size: clamp(1.8rem, 4.5vh, 3vw);
+      font-weight: 900;
+      color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 24px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(245, 166, 35, 0.6);
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .ampm-tag:hover {
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      transform: scale(1.08);
+    }
+
     .alarm-icons-container {
       display: flex;
       flex-direction: column;
@@ -224,6 +248,21 @@
       font-size: clamp(2.5rem, 6vh, 5rem);
       animation: pulseAlarm 2s infinite alternate;
       filter: drop-shadow(0 0 10px var(--accent-gold));
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    /* 鬧鐘響鈴時強烈閃動與 3 倍放大 */
+    .alarm-icon-item.ringing {
+      font-size: clamp(7.5rem, 18vh, 15vw) !important;
+      animation: alarmRinging 0.15s infinite alternate !important;
+      filter: drop-shadow(0 0 35px #FF3333) !important;
+      z-index: 50;
+    }
+
+    @keyframes alarmRinging {
+      0% { transform: scale(1) rotate(-15deg); opacity: 1; }
+      100% { transform: scale(1.2) rotate(15deg); opacity: 0.8; }
     }
 
     @keyframes pulseAlarm {
@@ -264,26 +303,13 @@
       line-height: 1;
     }
 
-    .ampm-tag {
-      position: absolute;
-      top: 2.5vh;
-      left: 2.5vw;
-      font-size: clamp(1.8rem, 4.5vh, 3vw);
-      font-weight: 900;
-      color: var(--accent-gold);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 20px;
-      border-radius: 10px;
-      border: 1px solid rgba(245, 166, 35, 0.4);
-      letter-spacing: 2px;
-    }
-
     /* 底部區域 */
     footer {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
 
     .quote-box {
@@ -319,7 +345,6 @@
       line-height: 1.2;
     }
 
-    /* 自訂公告全版模式 (佔用原本兩列的大小與空間) */
     .quote-box.custom-active .quote-text {
       display: none;
     }
@@ -329,6 +354,34 @@
       color: #FFD580;
       margin-top: 0;
       text-align: center;
+    }
+
+    /* 螢幕最右下角的背景切換鈕 */
+    .bg-switch-btn {
+      position: absolute;
+      right: 1.5vw;
+      bottom: 1.5vh;
+      z-index: 30;
+      background: rgba(0, 30, 60, 0.75);
+      border: 2px solid var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 10px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .bg-switch-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+      transform: scale(1.08);
     }
 
     /* 控制面板選單 */
@@ -437,6 +490,12 @@
       color: white;
     }
 
+    .field-hint {
+      font-size: 0.8rem;
+      color: #8CA0B8;
+      margin-top: -4px;
+    }
+
     .alarm-list {
       display: flex;
       flex-direction: column;
@@ -456,7 +515,7 @@
     }
 
     .alarm-time-label {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
       color: #FFF;
     }
@@ -516,39 +575,30 @@
   <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
     <div class="drawer-title">顯示與鬧鐘設定</div>
-    
-    <div class="control-group">
-      <div class="control-label">時間制</div>
-      <div class="btn-row">
-        <button class="btn active" id="btn24h">24 小時制</button>
-        <button class="btn" id="btn12h">12 小時制</button>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <div class="control-label">背景與經文輪播 (每30秒)</div>
-      <div class="btn-row">
-        <button class="btn active" id="btnPauseBg">自動播放</button>
-        <button class="btn" id="btnNextBg">切換下一張</button>
-      </div>
-    </div>
 
     <!-- 鬧鐘與鈴聲選擇區 -->
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定</div>
       <div class="btn-row" style="gap:5px;">
         <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
-        <input type="text" id="alarmLabelInput" class="input-field" placeholder="標籤 (選填)" style="flex:2;">
+        <input type="text" id="alarmLabelInput" class="input-field" placeholder="範例：晨禱提醒 / 食物箱發放" style="flex:2;">
       </div>
+      <div class="field-hint">時間格式範例：07:30 或 14:00</div>
       
-      <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲 (5種選擇)</div>
+      <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲與持續秒數</div>
       <div class="btn-row" style="gap:5px;">
-        <select id="alarmSoundSelect" class="select-field" style="flex:3;">
+        <select id="alarmSoundSelect" class="select-field" style="flex:2.5;">
           <option value="sound1">🔔 經典清脆 (Classic Chime)</option>
           <option value="sound2">🎵 溫和和弦 (Soft Chord)</option>
           <option value="sound3">🚨 急促警示 (Urgent Alert)</option>
           <option value="sound4">⛪ 優雅鐘聲 (Church Bell)</option>
           <option value="sound5">📟 活力嗶嗶 (Digital Beep)</option>
+        </select>
+        <select id="alarmDurationSelect" class="select-field" style="flex:1.5;">
+          <option value="10">10 秒</option>
+          <option value="20">20 秒</option>
+          <option value="30" selected>30 秒</option>
+          <option value="60">60 秒</option>
         </select>
         <button class="btn" id="btnTestSound" style="flex:1; font-size:0.85rem;">試聽</button>
       </div>
@@ -560,7 +610,7 @@
 
     <div class="control-group">
       <div class="control-label">自訂活動公告 (填寫將覆蓋經文輪播)</div>
-      <input type="text" id="announcementInput" class="input-field" placeholder="留空時恢復《靈命日糧》50則經文輪播...">
+      <input type="text" id="announcementInput" class="input-field" placeholder="範例：歡迎參加社團法人中華安得烈慈善協會感恩禮拜">
     </div>
 
     <div class="control-group" style="margin-top: auto; padding-top: 10px;">
@@ -572,7 +622,7 @@
   <div class="alarm-modal" id="alarmModal">
     <div class="alarm-modal-title">⏰ 鬧鐘提醒</div>
     <div class="alarm-modal-desc" id="alarmModalDesc">時間到了！</div>
-    <button class="btn" id="btnCloseAlarm" style="background: var(--accent-gold); color: #000; font-size: 1.5rem; padding: 10px 30px;">我知道了</button>
+    <button class="btn" id="btnCloseAlarm" style="background: var(--accent-gold); color: #000; font-size: 1.5rem; padding: 10px 30px;">關閉鬧鐘</button>
   </div>
 
   <!-- 動態背景層 -->
@@ -684,7 +734,8 @@
 
     <!-- 核心時間框 -->
     <main class="main-clock-card">
-      <div class="ampm-tag" id="ampmTag" style="display: none;">AM</div>
+      <!-- 點擊 AM/PM 標籤即可直接切換 12/24 小時制 -->
+      <div class="ampm-tag" id="ampmTag" title="點擊切換 12/24 小時制">24H</div>
       
       <div class="time-wrapper">
         <div class="time-hm">
@@ -708,6 +759,11 @@
         <div class="quote-text" id="quoteText">「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1</div>
         <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
       </div>
+
+      <!-- 大螢幕最右下角：背景切換按鈕 -->
+      <button class="bg-switch-btn" id="btnNextBgGlobal" title="切換下張背景與經文">
+        <span>換背景</span> 🖼️ ➔
+      </button>
     </footer>
 
   </div>
@@ -773,10 +829,12 @@
     let bgIndex = 0;
     const cycleDuration = 30; // 30 秒輪播
     let secondsElapsed = 0;
-    let alarms = []; // 鬧鐘陣列 [{ id, time, label, sound, triggered }]
+    let alarms = []; // 鬧鐘陣列 [{ id, time, label, sound, duration, triggered }]
+    let activeRingingTimer = null;
+    let activeRingingAlarmId = null;
     let isCustomAnnouncementActive = false;
 
-    // Web Audio API 音效合成器 (產生 5 種鈴聲)
+    // Web Audio API 音效合成器
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playAlarmSound(type) {
@@ -786,26 +844,26 @@
       const now = audioCtx.currentTime;
 
       switch(type) {
-        case 'sound1': // 經典清脆
+        case 'sound1':
           playTone(523.25, now, 0.15, 'sine');
           playTone(659.25, now + 0.15, 0.15, 'sine');
           playTone(783.99, now + 0.3, 0.3, 'sine');
           break;
-        case 'sound2': // 溫和和弦
+        case 'sound2':
           playTone(440, now, 0.6, 'triangle');
           playTone(554.37, now + 0.05, 0.6, 'triangle');
           playTone(659.25, now + 0.1, 0.6, 'triangle');
           break;
-        case 'sound3': // 急促警示
+        case 'sound3':
           for(let i=0; i<4; i++) {
             playTone(880, now + i*0.12, 0.08, 'sawtooth');
           }
           break;
-        case 'sound4': // 優雅鐘聲
+        case 'sound4':
           playTone(329.63, now, 1.2, 'sine');
           playTone(261.63, now + 0.4, 1.5, 'sine');
           break;
-        case 'sound5': // 活力嗶嗶
+        case 'sound5':
           playTone(1046.50, now, 0.08, 'square');
           playTone(1046.50, now + 0.15, 0.08, 'square');
           playTone(1046.50, now + 0.3, 0.15, 'square');
@@ -850,11 +908,10 @@
       const currentTimeStr = `${String(h).padStart(2, '0')}:${m}`;
 
       if (!is24Hour) {
-        ampmTag.style.display = 'block';
         ampmTag.innerText = h >= 12 ? 'PM' : 'AM';
         h = h % 12 || 12;
       } else {
-        ampmTag.style.display = 'none';
+        ampmTag.innerText = '24H';
       }
 
       hoursEl.innerText = String(h).padStart(2, '0');
@@ -879,19 +936,53 @@
       }
     }
 
+    // 觸發鬧鐘響鈴 (放大3倍、震動閃爍，並支援時間到達或手動點擊停止)
     function triggerAlarm(alarm) {
       alarm.triggered = true;
-      playAlarmSound(alarm.sound);
-      // 連續響鈴 3 次
-      setTimeout(() => playAlarmSound(alarm.sound), 1000);
-      setTimeout(() => playAlarmSound(alarm.sound), 2000);
+      activeRingingAlarmId = alarm.id;
+
+      // 在中央鬧鐘圖示上套用放大 3 倍與震動效果
+      const iconEl = document.getElementById(`alarm-icon-${alarm.id}`);
+      if (iconEl) {
+        iconEl.classList.add('ringing');
+      }
 
       alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${alarm.time})` : `鬧鐘時間 (${alarm.time}) 到了！`;
       alarmModal.classList.add('active');
+
+      let elapsedSeconds = 0;
+      const duration = parseInt(alarm.duration) || 30;
+
+      // 響鈴循環與計時器
+      activeRingingTimer = setInterval(() => {
+        playAlarmSound(alarm.sound);
+        elapsedSeconds += 2;
+
+        if (elapsedSeconds >= duration) {
+          stopRinging(alarm.id);
+        }
+      }, 2000);
+    }
+
+    // 停止鬧鐘響鈴
+    function stopRinging(alarmId) {
+      if (activeRingingTimer) {
+        clearInterval(activeRingingTimer);
+        activeRingingTimer = null;
+      }
+
+      const iconEl = document.getElementById(`alarm-icon-${alarmId}`);
+      if (iconEl) {
+        iconEl.classList.remove('ringing');
+      }
+
+      alarmModal.classList.remove('active');
     }
 
     document.getElementById('btnCloseAlarm').addEventListener('click', () => {
-      alarmModal.classList.remove('active');
+      if (activeRingingAlarmId) {
+        stopRinging(activeRingingAlarmId);
+      }
     });
 
     // 渲染鬧鐘項目與數字右側圖示
@@ -903,35 +994,46 @@
         const item = document.createElement('div');
         item.className = 'alarm-item';
         item.innerHTML = `
-          <div class="alarm-time-label">⏰ ${alarm.time} <span style="font-size:0.85rem; color:#F5A623;">${alarm.label ? ' - ' + alarm.label : ''}</span></div>
+          <div class="alarm-time-label">⏰ ${alarm.time} (${alarm.duration}s) <span style="font-size:0.85rem; color:#F5A623;">${alarm.label ? ' - ' + alarm.label : ''}</span></div>
           <button class="alarm-delete-btn" onclick="deleteAlarm(${alarm.id})">刪除</button>
         `;
         alarmList.appendChild(item);
 
         const icon = document.createElement('div');
         icon.className = 'alarm-icon-item';
+        icon.id = `alarm-icon-${alarm.id}`;
         icon.innerText = '⏰';
-        icon.title = `鬧鐘: ${alarm.time} ${alarm.label}`;
+        icon.title = `鬧鐘: ${alarm.time} ${alarm.label} (點擊關閉鬧鐘)`;
+        // 點擊鬧鐘圖示即可立即關閉鬧鐘
+        icon.addEventListener('click', () => stopRinging(alarm.id));
         alarmIconsContainer.appendChild(icon);
       });
     }
 
-    function addAlarm(time, label, sound) {
+    function addAlarm(time, label, sound, duration) {
       if (!time) return;
       alarms.push({
         id: Date.now(),
         time: time,
         label: label,
         sound: sound,
+        duration: duration,
         triggered: false
       });
       renderAlarms();
     }
 
     function deleteAlarm(id) {
+      stopRinging(id);
       alarms = alarms.filter(a => a.id !== id);
       renderAlarms();
     }
+
+    // --- 點擊 AM/PM 標籤切換 12/24 小時制 ---
+    ampmTag.addEventListener('click', () => {
+      is24Hour = !is24Hour;
+      updateClock();
+    });
 
     // --- 隨機抽取《靈命日糧》經文 ---
     function getRandomVerse() {
@@ -946,7 +1048,6 @@
         layer.classList.toggle('active', idx === index);
       });
 
-      // 當無自訂公告時，隨機輪播經文
       if (!isCustomAnnouncementActive) {
         quoteTextEl.innerText = getRandomVerse();
       }
@@ -957,6 +1058,12 @@
       bgIndex = (bgIndex + 1) % totalBgs;
       switchBackground(bgIndex);
     }
+
+    // 螢幕右下角按鈕切換背景
+    document.getElementById('btnNextBgGlobal').addEventListener('click', () => {
+      secondsElapsed = 0;
+      nextBackground();
+    });
 
     // --- 30 秒自動輪播計時 ---
     setInterval(() => {
@@ -973,51 +1080,23 @@
     // --- 控制選單事件監聽 ---
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
-    const btn24h = document.getElementById('btn24h');
-    const btn12h = document.getElementById('btn12h');
-    const btnPauseBg = document.getElementById('btnPauseBg');
-    const btnNextBg = document.getElementById('btnNextBg');
     const btnFullscreen = document.getElementById('btnFullscreen');
     const btnAddAlarm = document.getElementById('btnAddAlarm');
     const btnTestSound = document.getElementById('btnTestSound');
     const alarmTimeInput = document.getElementById('alarmTimeInput');
     const alarmLabelInput = document.getElementById('alarmLabelInput');
     const alarmSoundSelect = document.getElementById('alarmSoundSelect');
+    const alarmDurationSelect = document.getElementById('alarmDurationSelect');
     const announcementInput = document.getElementById('announcementInput');
 
     menuBtn.addEventListener('click', () => drawer.classList.toggle('open'));
-
-    btn24h.addEventListener('click', () => {
-      is24Hour = true;
-      btn24h.classList.add('active');
-      btn12h.classList.remove('active');
-      updateClock();
-    });
-
-    btn12h.addEventListener('click', () => {
-      is24Hour = false;
-      btn12h.classList.add('active');
-      btn24h.classList.remove('active');
-      updateClock();
-    });
-
-    btnPauseBg.addEventListener('click', () => {
-      autoRotate = !autoRotate;
-      btnPauseBg.innerText = autoRotate ? '自動播放' : '已暫停';
-      btnPauseBg.classList.toggle('active', autoRotate);
-    });
-
-    btnNextBg.addEventListener('click', () => {
-      secondsElapsed = 0;
-      nextBackground();
-    });
 
     btnTestSound.addEventListener('click', () => {
       playAlarmSound(alarmSoundSelect.value);
     });
 
     btnAddAlarm.addEventListener('click', () => {
-      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value);
+      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
       alarmTimeInput.value = '';
       alarmLabelInput.value = '';
     });
