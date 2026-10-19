@@ -78,7 +78,7 @@
       object-fit: cover;
     }
 
-    /* 主版面佈局 */
+    /* 主版面佈局 - 縮減上下 padding，釋出空間給文字 */
     .clock-app-container {
       position: relative;
       z-index: 10;
@@ -88,37 +88,37 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 2vh 2.5vw;
+      padding: 1.2vh 2vw;
     }
 
-    /* 頂部標題列 */
+    /* 頂部標題列 (文字放大 100%) */
     header {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 28px;
-      background: rgba(0, 30, 60, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 18px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      padding: 12px 32px;
+      background: rgba(0, 30, 60, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 20px;
+      border: 1.5px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 24px;
     }
 
-    /* 官方 Logo 精確繪製容器 */
+    /* 官方 Logo 放大 */
     .official-logo-box {
-      height: 60px;
+      height: 85px;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.4));
+      filter: drop-shadow(0 0 15px rgba(245, 166, 35, 0.5));
     }
 
     .brand-titles {
@@ -126,21 +126,25 @@
       flex-direction: column;
     }
 
+    /* 安得烈名稱放大 100% (原1.85rem -> 3.7rem) */
     .brand-title-main {
-      font-size: 1.85rem;
+      font-size: clamp(2.5rem, 4.2vh, 3.8rem);
       font-weight: 900;
-      letter-spacing: 2.5px;
+      letter-spacing: 3px;
       background: linear-gradient(180deg, #FFFFFF 0%, #E0EBF5 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 0 3px 12px rgba(0,0,0,0.6);
+      line-height: 1.1;
     }
 
+    /* 副標題放大 */
     .brand-title-sub {
-      font-size: 0.9rem;
+      font-size: clamp(1.2rem, 2vh, 1.8rem);
       color: var(--accent-gold);
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       font-weight: 700;
+      margin-top: 2px;
     }
 
     .date-lunar-display {
@@ -148,23 +152,23 @@
     }
 
     .date-text {
-      font-size: 1.7rem;
+      font-size: clamp(1.8rem, 3.2vh, 2.6rem);
       font-weight: 700;
       color: #FFFFFF;
       letter-spacing: 1px;
     }
 
     .lunar-text {
-      font-size: 1.05rem;
+      font-size: clamp(1.2rem, 2vh, 1.6rem);
       color: #D1E3F8;
       margin-top: 2px;
     }
 
-    /* 核心時間框 (字體再放大 20%，適應 5-10 公尺視距) */
+    /* 核心時間框 - 高度適度調整 */
     .main-clock-card {
       position: relative;
       width: 100%;
-      height: 72vh;
+      height: 56vh;
       background: var(--glass-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -185,12 +189,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 15px;
     }
 
-    /* 時與分：字體整體放大 20% */
+    /* 時與分 */
     .time-hm {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: clamp(18rem, 50vh, 45vw);
+      font-size: clamp(14rem, 42vh, 38vw);
       font-weight: 700;
       line-height: 0.75;
       letter-spacing: -0.01em;
@@ -209,6 +214,26 @@
       margin: 0 -0.01em;
       animation: pulseColon 2s infinite;
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
+    }
+
+    /* 動態鬧鐘圖示容器 (位在時鐘數字右邊) */
+    .alarm-icons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .alarm-icon-item {
+      font-size: clamp(2.5rem, 6vh, 5rem);
+      animation: pulseAlarm 2s infinite alternate;
+      filter: drop-shadow(0 0 10px var(--accent-gold));
+    }
+
+    @keyframes pulseAlarm {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.18); opacity: 1; }
     }
 
     @keyframes pulseColon {
@@ -239,7 +264,7 @@
 
     .time-sec {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: clamp(3.2rem, 9.5vh, 7.5vw);
+      font-size: clamp(3rem, 8vh, 6.5vw);
       font-weight: 700;
       color: #FFFFFF;
       line-height: 1;
@@ -259,7 +284,7 @@
       letter-spacing: 2px;
     }
 
-    /* 底部標語與靈命日糧經文說明 */
+    /* 底部標語與靈命日糧經文說明 (字體放大 100%) */
     footer {
       width: 100%;
       display: flex;
@@ -269,28 +294,32 @@
 
     .quote-box {
       width: 100%;
-      background: rgba(0, 25, 50, 0.55);
-      border-left: 6px solid var(--accent-gold);
-      padding: 12px 28px;
-      border-radius: 0 16px 16px 0;
-      backdrop-filter: blur(10px);
-      transition: all 0.5s ease;
+      background: rgba(0, 25, 50, 0.65);
+      border-left: 10px solid var(--accent-gold);
+      padding: 18px 36px;
+      border-radius: 0 20px 20px 0;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     }
 
+    /* 經文放大 100% (原1.25rem -> 2.5rem) */
     .quote-text {
-      font-size: 1.25rem;
+      font-size: clamp(1.8rem, 3.2vh, 2.6rem);
       font-weight: 700;
       color: #E2EFFC;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      line-height: 1.35;
     }
 
+    /* 公告文字放大 100% (原2.1rem -> 4.2rem) */
     .announcement-text {
-      font-size: 2.1rem;
+      font-size: clamp(2.8rem, 5vh, 4.2rem);
       font-weight: 900;
       color: var(--warm-amber);
-      margin-top: 4px;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      margin-top: 8px;
+      letter-spacing: 2px;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.8);
+      line-height: 1.2;
     }
 
     /* 控制面板選單 */
@@ -302,15 +331,16 @@
       background: rgba(0, 40, 80, 0.6);
       border: 1px solid var(--glass-border);
       color: white;
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
+      font-size: 1.4rem;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       transition: all 0.3s;
-      opacity: 0.3;
+      opacity: 0.4;
     }
 
     .menu-btn:hover {
@@ -321,10 +351,10 @@
     .drawer {
       position: fixed;
       top: 0;
-      right: -360px;
-      width: 340px;
+      right: -420px;
+      width: 400px;
       height: 100%;
-      background: rgba(4, 18, 36, 0.95);
+      background: rgba(4, 18, 36, 0.96);
       backdrop-filter: blur(20px);
       z-index: 90;
       box-shadow: -10px 0 30px rgba(0,0,0,0.8);
@@ -332,8 +362,9 @@
       transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
       border-left: 1px solid var(--glass-border);
+      overflow-y: auto;
     }
 
     .drawer.open {
@@ -354,8 +385,9 @@
     }
 
     .control-label {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #B0C4DE;
+      font-weight: bold;
     }
 
     .btn-row {
@@ -389,12 +421,85 @@
       color: white;
       border-radius: 8px;
     }
+
+    /* 鬧鐘清單區域 */
+    .alarm-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .alarm-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.08);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-left: 3px solid var(--accent-gold);
+    }
+
+    .alarm-time-label {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #FFF;
+    }
+
+    .alarm-delete-btn {
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    /* 響鈴視窗 modal */
+    .alarm-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: rgba(2, 16, 35, 0.95);
+      border: 3px solid var(--accent-gold);
+      box-shadow: 0 0 50px rgba(245, 166, 35, 0.6);
+      padding: 40px;
+      border-radius: 24px;
+      z-index: 200;
+      text-align: center;
+      display: none;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .alarm-modal.active {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .alarm-modal-title {
+      font-size: 3rem;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+    }
+
+    .alarm-modal-desc {
+      font-size: 2rem;
+      color: #FFF;
+      margin-bottom: 25px;
+    }
   </style>
 </head>
 <body>
 
+  <!-- 控制面板觸發鈕 -->
   <button class="menu-btn" id="menuToggle">⚙️</button>
 
+  <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
     <div class="drawer-title">顯示設定</div>
     
@@ -415,13 +520,32 @@
     </div>
 
     <div class="control-group">
+      <div class="control-label">新增鬧鐘設定</div>
+      <div class="btn-row" style="gap:5px;">
+        <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
+        <input type="text" id="alarmLabelInput" class="input-field" placeholder="標籤 (選填)" style="flex:2;">
+        <button class="btn" id="btnAddAlarm" style="background:var(--primary-blue); color:var(--accent-gold);">新增</button>
+      </div>
+      <div class="alarm-list" id="alarmList">
+        <!-- 動態渲染鬧鐘項目 -->
+      </div>
+    </div>
+
+    <div class="control-group">
       <div class="control-label">自訂活動公告</div>
       <input type="text" id="announcementInput" class="input-field" placeholder="請輸入欲顯示的公告文字...">
     </div>
 
-    <div class="control-group" style="margin-top: auto;">
+    <div class="control-group" style="margin-top: auto; padding-top: 15px;">
       <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
     </div>
+  </div>
+
+  <!-- 鬧鐘響鈴提示 Modal -->
+  <div class="alarm-modal" id="alarmModal">
+    <div class="alarm-modal-title">⏰ 鬧鐘提醒</div>
+    <div class="alarm-modal-desc" id="alarmModalDesc">時間到了！</div>
+    <button class="btn" id="btnCloseAlarm" style="background: var(--accent-gold); color: #000; font-size: 1.5rem; padding: 10px 30px;">我知道了</button>
   </div>
 
   <!-- 動態背景層 -->
@@ -491,15 +615,15 @@
   <!-- 主介面 -->
   <div class="clock-app-container">
     
+    <!-- 頂部標題列 (標題放大100%) -->
     <header>
       <div class="brand-section">
-        <!-- 參照官方 Logo 重建高解析 SVG (麥穗、愛心、小魚) -->
+        <!-- 官方 Logo -->
         <div class="official-logo-box">
-          <svg width="110" height="60" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="150" height="85" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- 左上：褐色方塊與白麥穗 -->
             <g transform="rotate(-7, 50, 35)">
               <rect x="5" y="5" width="82" height="78" rx="4" fill="#8C531B"/>
-              <!-- 麥穗主幹與麥粒 -->
               <path d="M18 72 Q 42 45 70 14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
               <path d="M 32 52 Q 18 44 20 36 Q 34 42 37 50 Z" fill="#FFFFFF"/>
               <path d="M 38 48 Q 52 40 54 31 Q 40 34 36 45 Z" fill="#FFFFFF"/>
@@ -517,7 +641,6 @@
             <!-- 左下：黃褐色方塊與綠魚 -->
             <g transform="rotate(-12, 45, 95)">
               <rect x="8" y="75" width="78" height="82" rx="4" fill="#A06822"/>
-              <!-- 魚形 -->
               <g transform="translate(20, 86) rotate(-38) scale(0.72)">
                 <path d="M 10 30 Q 38 3 75 30 Q 38 57 10 30 Z" fill="#7FA827"/>
                 <path d="M 10 30 L -12 12 L -6 30 L -12 48 Z" fill="#7FA827"/>
@@ -538,7 +661,7 @@
       </div>
     </header>
 
-    <!-- 核心時間框 (極致放大 20%) -->
+    <!-- 核心時間框 -->
     <main class="main-clock-card">
       <div class="ampm-tag" id="ampmTag" style="display: none;">AM</div>
       
@@ -548,6 +671,9 @@
           <span class="colon">:</span>
           <span id="minutes">37</span>
         </div>
+        
+        <!-- 每設定一個鬧鐘，這裡會動態多一個計時器圖示 ⏰ -->
+        <div class="alarm-icons-container" id="alarmIconsContainer"></div>
       </div>
 
       <!-- 右下角秒數 -->
@@ -557,10 +683,10 @@
       </div>
     </main>
 
-    <!-- 底部：官網標語 + 靈命日糧經文輪播 -->
+    <!-- 底部：官網標語 + 靈命日糧經文輪播 (文字放大100%) -->
     <footer>
       <div class="quote-box">
-        <div class="quote-text" id="quoteText">「攜手分擔困境，用愛點亮希望」</div>
+        <div class="quote-text" id="quoteText">「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1</div>
         <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
       </div>
     </footer>
@@ -574,8 +700,9 @@
     let bgIndex = 0;
     const cycleDuration = 30; // 30 秒輪播
     let secondsElapsed = 0;
+    let alarms = []; // 鬧鐘陣列 [{ id, time, label, triggered }]
 
-    // 參照安得烈官網專案 + 靈命日糧聖經經文組合
+    // 安得烈官網專案 + 靈命日糧經文
     const quoteList = [
       {
         quote: "「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1",
@@ -586,7 +713,7 @@
         announcement: "培鷹計畫 — 助學金與才藝培育，翻轉弱勢學子未來"
       },
       {
-        quote: "「施比受更為有福。各人要隨本心所酌定的，不要作難，不要勉強，因為捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
+        quote: "「施比受更為有福。各人要隨本心所酌定的，捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
         announcement: "長青膳糧箱專案 — 關懷長者健康，傳遞社會溫暖"
       },
       {
@@ -603,13 +730,19 @@
     const dateTextEl = document.getElementById('dateText');
     const quoteTextEl = document.getElementById('quoteText');
     const announcementTextEl = document.getElementById('announcementText');
+    const alarmIconsContainer = document.getElementById('alarmIconsContainer');
+    const alarmList = document.getElementById('alarmList');
+    const alarmModal = document.getElementById('alarmModal');
+    const alarmModalDesc = document.getElementById('alarmModalDesc');
 
-    // --- 時間與日期更新 ---
+    // --- 時間與鬧鐘監測 ---
     function updateClock() {
       const now = new Date();
       let h = now.getHours();
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
+
+      const currentTimeStr = `${String(h).padStart(2, '0')}:${m}`;
 
       if (!is24Hour) {
         ampmTag.style.display = 'block';
@@ -630,16 +763,75 @@
       const dayName = days[now.getDay()];
 
       dateTextEl.innerText = `${year}年${month}月${date}日 ${dayName}`;
+
+      // 檢查鬧鐘
+      if (s === '00') {
+        alarms.forEach(alarm => {
+          if (alarm.time === currentTimeStr && !alarm.triggered) {
+            triggerAlarm(alarm);
+          }
+        });
+      }
     }
 
-    // --- 背景與經文同步切換 ---
+    // 觸發鬧鐘響鈴
+    function triggerAlarm(alarm) {
+      alarm.triggered = true;
+      alarmModalDesc.innerText = alarm.label ? `鬧鐘標籤：${alarm.label} (${alarm.time})` : `鬧鐘時間 (${alarm.time}) 到了！`;
+      alarmModal.classList.add('active');
+    }
+
+    document.getElementById('btnCloseAlarm').addEventListener('click', () => {
+      alarmModal.classList.remove('active');
+    });
+
+    // 渲染鬧鐘與數字右側的鬧鐘圖示
+    function renderAlarms() {
+      alarmList.innerHTML = '';
+      alarmIconsContainer.innerHTML = '';
+
+      alarms.forEach((alarm) => {
+        // 1. 渲染設定清單項目
+        const item = document.createElement('div');
+        item.className = 'alarm-item';
+        item.innerHTML = `
+          <div class="alarm-time-label">⏰ ${alarm.time} <span style="font-size:0.85rem; color:#F5A623;">${alarm.label ? ' - ' + alarm.label : ''}</span></div>
+          <button class="alarm-delete-btn" onclick="deleteAlarm(${alarm.id})">刪除</button>
+        `;
+        alarmList.appendChild(item);
+
+        // 2. 在數字右邊多一個計時器/鬧鐘圖示
+        const icon = document.createElement('div');
+        icon.className = 'alarm-icon-item';
+        icon.innerText = '⏰';
+        icon.title = `鬧鐘: ${alarm.time} ${alarm.label}`;
+        alarmIconsContainer.appendChild(icon);
+      });
+    }
+
+    function addAlarm(time, label) {
+      if (!time) return;
+      alarms.push({
+        id: Date.now(),
+        time: time,
+        label: label,
+        triggered: false
+      });
+      renderAlarms();
+    }
+
+    function deleteAlarm(id) {
+      alarms = alarms.filter(a => a.id !== id);
+      renderAlarms();
+    }
+
+    // --- 背景與經文輪播 ---
     function switchBackground(index) {
       const layers = document.querySelectorAll('.bg-layer');
       layers.forEach((layer, idx) => {
         layer.classList.toggle('active', idx === index);
       });
 
-      // 同步切換靈命日糧經文與官網公告
       const currentData = quoteList[index % quoteList.length];
       quoteTextEl.innerText = currentData.quote;
       announcementTextEl.innerText = currentData.announcement;
@@ -663,7 +855,7 @@
       }
     }, 1000);
 
-    // --- 控制選單邏輯 ---
+    // --- 控制選單與事件監聽 ---
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const btn24h = document.getElementById('btn24h');
@@ -671,6 +863,9 @@
     const btnPauseBg = document.getElementById('btnPauseBg');
     const btnNextBg = document.getElementById('btnNextBg');
     const btnFullscreen = document.getElementById('btnFullscreen');
+    const btnAddAlarm = document.getElementById('btnAddAlarm');
+    const alarmTimeInput = document.getElementById('alarmTimeInput');
+    const alarmLabelInput = document.getElementById('alarmLabelInput');
     const announcementInput = document.getElementById('announcementInput');
 
     menuBtn.addEventListener('click', () => drawer.classList.toggle('open'));
@@ -698,6 +893,12 @@
     btnNextBg.addEventListener('click', () => {
       secondsElapsed = 0;
       nextBackground();
+    });
+
+    btnAddAlarm.addEventListener('click', () => {
+      addAlarm(alarmTimeInput.value, alarmLabelInput.value);
+      alarmTimeInput.value = '';
+      alarmLabelInput.value = '';
     });
 
     announcementInput.addEventListener('input', (e) => {
