@@ -78,7 +78,7 @@
       object-fit: cover;
     }
 
-    /* 主版面佈局 - 縮減上下 padding，釋出空間給文字 */
+    /* 主版面佈局 */
     .clock-app-container {
       position: relative;
       z-index: 10;
@@ -91,7 +91,7 @@
       padding: 1.2vh 2vw;
     }
 
-    /* 頂部標題列 (文字放大 100%) */
+    /* 頂部標題列 */
     header {
       width: 100%;
       display: flex;
@@ -112,7 +112,6 @@
       gap: 24px;
     }
 
-    /* 官方 Logo 放大 */
     .official-logo-box {
       height: 85px;
       display: flex;
@@ -126,7 +125,6 @@
       flex-direction: column;
     }
 
-    /* 安得烈名稱放大 100% (原1.85rem -> 3.7rem) */
     .brand-title-main {
       font-size: clamp(2.5rem, 4.2vh, 3.8rem);
       font-weight: 900;
@@ -138,7 +136,6 @@
       line-height: 1.1;
     }
 
-    /* 副標題放大 */
     .brand-title-sub {
       font-size: clamp(1.2rem, 2vh, 1.8rem);
       color: var(--accent-gold);
@@ -164,7 +161,7 @@
       margin-top: 2px;
     }
 
-    /* 核心時間框 - 高度適度調整 */
+    /* 核心時間框 */
     .main-clock-card {
       position: relative;
       width: 100%;
@@ -192,7 +189,6 @@
       gap: 15px;
     }
 
-    /* 時與分 */
     .time-hm {
       font-family: 'Chakra Petch', sans-serif;
       font-size: clamp(14rem, 42vh, 38vw);
@@ -216,7 +212,6 @@
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
     }
 
-    /* 動態鬧鐘圖示容器 (位在時鐘數字右邊) */
     .alarm-icons-container {
       display: flex;
       flex-direction: column;
@@ -241,7 +236,6 @@
       50% { opacity: 0.25; }
     }
 
-    /* 右下角秒數區塊 */
     .seconds-badge {
       position: absolute;
       bottom: 2vh;
@@ -284,7 +278,7 @@
       letter-spacing: 2px;
     }
 
-    /* 底部標語與靈命日糧經文說明 (字體放大 100%) */
+    /* 底部區域 */
     footer {
       width: 100%;
       display: flex;
@@ -300,18 +294,21 @@
       border-radius: 0 20px 20px 0;
       backdrop-filter: blur(14px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      min-height: 13vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    /* 經文放大 100% (原1.25rem -> 2.5rem) */
     .quote-text {
       font-size: clamp(1.8rem, 3.2vh, 2.6rem);
       font-weight: 700;
       color: #E2EFFC;
       letter-spacing: 1.5px;
       line-height: 1.35;
+      transition: opacity 0.5s ease;
     }
 
-    /* 公告文字放大 100% (原2.1rem -> 4.2rem) */
     .announcement-text {
       font-size: clamp(2.8rem, 5vh, 4.2rem);
       font-weight: 900;
@@ -320,6 +317,18 @@
       letter-spacing: 2px;
       text-shadow: 0 3px 12px rgba(0,0,0,0.8);
       line-height: 1.2;
+    }
+
+    /* 自訂公告全版模式 (佔用原本兩列的大小與空間) */
+    .quote-box.custom-active .quote-text {
+      display: none;
+    }
+
+    .quote-box.custom-active .announcement-text {
+      font-size: clamp(3.8rem, 7vh, 6rem);
+      color: #FFD580;
+      margin-top: 0;
+      text-align: center;
     }
 
     /* 控制面板選單 */
@@ -351,8 +360,8 @@
     .drawer {
       position: fixed;
       top: 0;
-      right: -420px;
-      width: 400px;
+      right: -450px;
+      width: 420px;
       height: 100%;
       background: rgba(4, 18, 36, 0.96);
       backdrop-filter: blur(20px);
@@ -362,7 +371,7 @@
       transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
       border-left: 1px solid var(--glass-border);
       overflow-y: auto;
     }
@@ -381,7 +390,7 @@
     .control-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .control-label {
@@ -392,7 +401,7 @@
 
     .btn-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn {
@@ -413,21 +422,26 @@
       color: var(--accent-gold);
     }
 
-    .input-field {
+    .input-field, .select-field {
       width: 100%;
       padding: 10px;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.5);
       border: 1px solid var(--glass-border);
       color: white;
       border-radius: 8px;
+      font-size: 0.95rem;
     }
 
-    /* 鬧鐘清單區域 */
+    .select-field option {
+      background: #041224;
+      color: white;
+    }
+
     .alarm-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 180px;
+      max-height: 140px;
       overflow-y: auto;
     }
 
@@ -442,7 +456,7 @@
     }
 
     .alarm-time-label {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       color: #FFF;
     }
@@ -457,13 +471,13 @@
       font-size: 0.85rem;
     }
 
-    /* 響鈴視窗 modal */
+    /* 鬧鐘響鈴 Modal */
     .alarm-modal {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(2, 16, 35, 0.95);
+      background: rgba(2, 16, 35, 0.96);
       border: 3px solid var(--accent-gold);
       box-shadow: 0 0 50px rgba(245, 166, 35, 0.6);
       padding: 40px;
@@ -501,7 +515,7 @@
 
   <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
-    <div class="drawer-title">顯示設定</div>
+    <div class="drawer-title">顯示與鬧鐘設定</div>
     
     <div class="control-group">
       <div class="control-label">時間制</div>
@@ -519,24 +533,37 @@
       </div>
     </div>
 
+    <!-- 鬧鐘與鈴聲選擇區 -->
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定</div>
       <div class="btn-row" style="gap:5px;">
         <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
         <input type="text" id="alarmLabelInput" class="input-field" placeholder="標籤 (選填)" style="flex:2;">
-        <button class="btn" id="btnAddAlarm" style="background:var(--primary-blue); color:var(--accent-gold);">新增</button>
       </div>
-      <div class="alarm-list" id="alarmList">
-        <!-- 動態渲染鬧鐘項目 -->
+      
+      <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲 (5種選擇)</div>
+      <div class="btn-row" style="gap:5px;">
+        <select id="alarmSoundSelect" class="select-field" style="flex:3;">
+          <option value="sound1">🔔 經典清脆 (Classic Chime)</option>
+          <option value="sound2">🎵 溫和和弦 (Soft Chord)</option>
+          <option value="sound3">🚨 急促警示 (Urgent Alert)</option>
+          <option value="sound4">⛪ 優雅鐘聲 (Church Bell)</option>
+          <option value="sound5">📟 活力嗶嗶 (Digital Beep)</option>
+        </select>
+        <button class="btn" id="btnTestSound" style="flex:1; font-size:0.85rem;">試聽</button>
       </div>
+
+      <button class="btn" id="btnAddAlarm" style="background:var(--primary-blue); color:var(--accent-gold); margin-top: 5px;">＋ 新增鬧鐘</button>
+      
+      <div class="alarm-list" id="alarmList"></div>
     </div>
 
     <div class="control-group">
-      <div class="control-label">自訂活動公告</div>
-      <input type="text" id="announcementInput" class="input-field" placeholder="請輸入欲顯示的公告文字...">
+      <div class="control-label">自訂活動公告 (填寫將覆蓋經文輪播)</div>
+      <input type="text" id="announcementInput" class="input-field" placeholder="留空時恢復《靈命日糧》50則經文輪播...">
     </div>
 
-    <div class="control-group" style="margin-top: auto; padding-top: 15px;">
+    <div class="control-group" style="margin-top: auto; padding-top: 10px;">
       <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
     </div>
   </div>
@@ -615,13 +642,11 @@
   <!-- 主介面 -->
   <div class="clock-app-container">
     
-    <!-- 頂部標題列 (標題放大100%) -->
+    <!-- 頂部標題列 -->
     <header>
       <div class="brand-section">
-        <!-- 官方 Logo -->
         <div class="official-logo-box">
           <svg width="150" height="85" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 左上：褐色方塊與白麥穗 -->
             <g transform="rotate(-7, 50, 35)">
               <rect x="5" y="5" width="82" height="78" rx="4" fill="#8C531B"/>
               <path d="M18 72 Q 42 45 70 14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
@@ -631,14 +656,10 @@
               <path d="M 52 33 Q 66 23 68 15 Q 54 18 49 29 Z" fill="#FFFFFF"/>
               <path d="M 58 23 Q 48 13 50 6 Q 62 12 61 20 Z" fill="#FFFFFF"/>
             </g>
-
-            <!-- 右上：綠色方塊與白愛心 -->
             <g transform="rotate(7, 150, 35)">
               <rect x="102" y="8" width="82" height="78" rx="4" fill="#7FA827"/>
               <path d="M143 64 C126 48 116 34 132 23 C143 15 153 26 156 29 C159 26 169 15 180 23 C196 34 186 48 169 64 L156 75 Z" fill="#FFFFFF"/>
             </g>
-
-            <!-- 左下：黃褐色方塊與綠魚 -->
             <g transform="rotate(-12, 45, 95)">
               <rect x="8" y="75" width="78" height="82" rx="4" fill="#A06822"/>
               <g transform="translate(20, 86) rotate(-38) scale(0.72)">
@@ -672,20 +693,18 @@
           <span id="minutes">37</span>
         </div>
         
-        <!-- 每設定一個鬧鐘，這裡會動態多一個計時器圖示 ⏰ -->
         <div class="alarm-icons-container" id="alarmIconsContainer"></div>
       </div>
 
-      <!-- 右下角秒數 -->
       <div class="seconds-badge">
         <span class="seconds-label">SEC</span>
         <span class="time-sec" id="seconds">00</span>
       </div>
     </main>
 
-    <!-- 底部：官網標語 + 靈命日糧經文輪播 (文字放大100%) -->
+    <!-- 底部：經文輪播與公告 -->
     <footer>
-      <div class="quote-box">
+      <div class="quote-box" id="quoteBox">
         <div class="quote-text" id="quoteText">「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1</div>
         <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
       </div>
@@ -694,33 +713,118 @@
   </div>
 
   <script>
+    // --- 50 則《靈命日糧》精選經文數據庫 ---
+    const dailyBreadVerses = [
+      "「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1",
+      "「施比受更為有福。各人要隨本心所酌定的，捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
+      "「凡你們所作的，都要憑愛心而作。各人不要單顧自己的事，也要顧別人的事。」— 腓立比書 2:4",
+      "「你們要先求祂的國和祂的義，這些東西都要加給你們了。」— 馬太福音 6:33",
+      "「耶和華是我的牧者，我必不致缺乏。」— 詩篇 23:1",
+      "「應當一無掛慮，只要凡事藉著禱告、祈求，和感謝，將你們所要的告訴神。」— 腓立比書 4:6",
+      "「神所賜、出人意外的平安必在基督耶穌裡保守你們的心懷意念。」— 腓立比書 4:7",
+      "「我的神必照祂榮耀的豐富，在基督耶穌裡，使你們一切所需用的都充足。」— 腓立比書 4:19",
+      "「你要專心仰賴耶和華，不可倚靠自己的聰明，在你一切所行的事上都要認定祂，祂必指引你的路。」— 箴言 3:5-6",
+      "「耶和華的慈愛永不止息，祂的憐憫永不斷絕，每早晨這都是新的。」— 耶利米哀歌 3:22-23",
+      "「愛是恆久忍耐，又有恩慈；愛是不嫉妒，愛是不自誇，不張狂。」— 哥林多前書 13:4",
+      "「如今常存的有信，有望，有愛這三樣，其中最大的是愛。」— 哥林多前書 13:13",
+      "「你們光也當這樣照在人前，叫他們看見你們的好行為，便將榮耀歸給你們在天上的父。」— 馬太福音 5:16",
+      "「神就是愛；住在愛裡面的，就是住在神裡面，神也住在祂裡面。」— 約翰一書 4:16",
+      "「喜樂的心乃是良藥；憂傷的靈使骨枯乾。」— 箴言 17:22",
+      "「但那等候耶和華的必重新得力。他們必如鷹展翅上騰；他們奔跑卻不困倦，行走卻不疲乏。」— 以賽亞書 40:31",
+      "「我靠著那加給我力量的，凡事都能作。」— 腓立比書 4:13",
+      "「你們要生發仁愛的心，彼此相待，用溫柔的心互相包容。」— 以弗所書 4:2",
+      "「當將你的事交託耶和華，並倚靠祂，祂就必成全。」— 詩篇 37:5",
+      "「你的話是我腳前的燈，是我路上的光。」— 詩篇 119:105",
+      "「耶和華近前聽求告祂的人，就是誠心求告祂的人。」— 詩篇 145:18",
+      "「忍受試煉的人是有福的，因為他經過試驗以後，必得生命的冠冕。」— 雅各書 1:12",
+      "「你們要彼此相愛，像我愛你們一樣，這就是我的命令。」— 約翰福音 15:12",
+      "「我們曉得萬事都互相效力，叫愛神的人得益處。」— 羅馬書 8:28",
+      "「若有人在基督裡，他就是新造的人，舊事已過，都變成新的了。」— 哥林多後書 5:17",
+      "「恩慈相待，存憐憫的心，彼此饒恕，正如神在基督裡饒恕了你們一樣。」— 以弗所書 4:32",
+      "「你要保守你心，勝過保守一切，因為一生的一效是由心發出。」— 箴言 4:23",
+      "「耶和華是我的亮光，是我的拯救，我還怕誰呢？」— 詩篇 27:1",
+      "「得勝的，我要賜他在我寶座上與我同坐。」— 啟示錄 3:21",
+      "「凡勞苦擔重擔的人可以到我這裡來，我就使你們得安息。」— 馬太福音 11:28",
+      "「這是我所命令你的：你當剛強壯膽！不要懼怕，也不要驚晃。」— 約書亞記 1:9",
+      "「你們要敬畏耶和華，誠誠實實地盡心事奉祂，想念祂為你們所做的事何等的大。」— 撒母耳記上 12:24",
+      "「愛人不可虛假；惡，要厭惡；善，要親近。」— 羅馬書 12:9",
+      "「在患難中要忍耐，禱告要恆心。」— 羅馬書 12:12",
+      "「少種的少收，多種的多收，這話是真的。」— 哥林多後書 9:6",
+      "「我們行善，不可喪志；若不灰心，到了時候就要收成。」— 加拉太書 6:9",
+      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖撒羅尼迦前書 5:16-18",
+      "「但願使人有盼望的神，因信將諸般的喜樂、平安充滿你們的心。」— 羅馬書 15:13",
+      "「耶和華必為你們爭戰，你們只管靜默，不要作聲。」— 出埃及記 14:14",
+      "「神為愛祂的人所預備的是眼睛未曾看見，耳朵未曾聽見的。」— 哥林多前書 2:9",
+      "「流淚撒種的，必歡呼收割！」— 詩篇 126:5",
+      "「你的日子如何，你的力量也必如何。」— 申命記 33:25",
+      "「我留下平安給你們；我將我的平安賜給你們。」— 約翰福音 14:27",
+      "「神是我們的避難所，是我們的力量，是我們在患難中隨時的幫助。」— 詩篇 46:1",
+      "「堅心倚賴你的，你必保守他十分平安，因為他倚靠你。」— 以賽亞書 26:3",
+      "「凡事謙虛、溫柔、忍耐，用愛心互相寬容。」— 以弗所書 4:2",
+      "「主是我在急難中的力量，是我心中的磐石。」— 詩篇 73:26",
+      "「要彼此相愛，像我愛你們一樣；這是我的命令。」— 約翰福音 15:12",
+      "「主的恩典乃是一生之久；一宿雖有哭泣，早晨便必歡呼。」— 詩篇 30:5",
+      "「你們要嘗嘗主恩的滋味，便知祂是美善；投靠祂的人有福了！」— 詩篇 34:8"
+    ];
+
     // --- 狀態控制 ---
     let is24Hour = true;
     let autoRotate = true;
     let bgIndex = 0;
     const cycleDuration = 30; // 30 秒輪播
     let secondsElapsed = 0;
-    let alarms = []; // 鬧鐘陣列 [{ id, time, label, triggered }]
+    let alarms = []; // 鬧鐘陣列 [{ id, time, label, sound, triggered }]
+    let isCustomAnnouncementActive = false;
 
-    // 安得烈官網專案 + 靈命日糧經文
-    const quoteList = [
-      {
-        quote: "「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1",
-        announcement: "安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長"
-      },
-      {
-        quote: "「攜手分擔困境，用愛點亮希望；慈愛與誠實彼此相遇，公義與平安彼此相親。」",
-        announcement: "培鷹計畫 — 助學金與才藝培育，翻轉弱勢學子未來"
-      },
-      {
-        quote: "「施比受更為有福。各人要隨本心所酌定的，捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
-        announcement: "長青膳糧箱專案 — 關懷長者健康，傳遞社會溫暖"
-      },
-      {
-        quote: "「凡你們所作的，都要憑愛心而作。各人不要單顧自己的事，也要顧別人的事。」— 腓立比書 2:4",
-        announcement: "安心計畫 — 急難救助與實物支援，守護困頓家庭"
+    // Web Audio API 音效合成器 (產生 5 種鈴聲)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playAlarmSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
-    ];
+      const now = audioCtx.currentTime;
+
+      switch(type) {
+        case 'sound1': // 經典清脆
+          playTone(523.25, now, 0.15, 'sine');
+          playTone(659.25, now + 0.15, 0.15, 'sine');
+          playTone(783.99, now + 0.3, 0.3, 'sine');
+          break;
+        case 'sound2': // 溫和和弦
+          playTone(440, now, 0.6, 'triangle');
+          playTone(554.37, now + 0.05, 0.6, 'triangle');
+          playTone(659.25, now + 0.1, 0.6, 'triangle');
+          break;
+        case 'sound3': // 急促警示
+          for(let i=0; i<4; i++) {
+            playTone(880, now + i*0.12, 0.08, 'sawtooth');
+          }
+          break;
+        case 'sound4': // 優雅鐘聲
+          playTone(329.63, now, 1.2, 'sine');
+          playTone(261.63, now + 0.4, 1.5, 'sine');
+          break;
+        case 'sound5': // 活力嗶嗶
+          playTone(1046.50, now, 0.08, 'square');
+          playTone(1046.50, now + 0.15, 0.08, 'square');
+          playTone(1046.50, now + 0.3, 0.15, 'square');
+          break;
+      }
+    }
+
+    function playTone(freq, startTime, duration, type='sine') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.3, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    }
 
     // --- DOM 元素 ---
     const hoursEl = document.getElementById('hours');
@@ -728,6 +832,7 @@
     const secondsEl = document.getElementById('seconds');
     const ampmTag = document.getElementById('ampmTag');
     const dateTextEl = document.getElementById('dateText');
+    const quoteBox = document.getElementById('quoteBox');
     const quoteTextEl = document.getElementById('quoteText');
     const announcementTextEl = document.getElementById('announcementText');
     const alarmIconsContainer = document.getElementById('alarmIconsContainer');
@@ -764,7 +869,7 @@
 
       dateTextEl.innerText = `${year}年${month}月${date}日 ${dayName}`;
 
-      // 檢查鬧鐘
+      // 鬧鐘響鈴偵測
       if (s === '00') {
         alarms.forEach(alarm => {
           if (alarm.time === currentTimeStr && !alarm.triggered) {
@@ -774,10 +879,14 @@
       }
     }
 
-    // 觸發鬧鐘響鈴
     function triggerAlarm(alarm) {
       alarm.triggered = true;
-      alarmModalDesc.innerText = alarm.label ? `鬧鐘標籤：${alarm.label} (${alarm.time})` : `鬧鐘時間 (${alarm.time}) 到了！`;
+      playAlarmSound(alarm.sound);
+      // 連續響鈴 3 次
+      setTimeout(() => playAlarmSound(alarm.sound), 1000);
+      setTimeout(() => playAlarmSound(alarm.sound), 2000);
+
+      alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${alarm.time})` : `鬧鐘時間 (${alarm.time}) 到了！`;
       alarmModal.classList.add('active');
     }
 
@@ -785,13 +894,12 @@
       alarmModal.classList.remove('active');
     });
 
-    // 渲染鬧鐘與數字右側的鬧鐘圖示
+    // 渲染鬧鐘項目與數字右側圖示
     function renderAlarms() {
       alarmList.innerHTML = '';
       alarmIconsContainer.innerHTML = '';
 
       alarms.forEach((alarm) => {
-        // 1. 渲染設定清單項目
         const item = document.createElement('div');
         item.className = 'alarm-item';
         item.innerHTML = `
@@ -800,7 +908,6 @@
         `;
         alarmList.appendChild(item);
 
-        // 2. 在數字右邊多一個計時器/鬧鐘圖示
         const icon = document.createElement('div');
         icon.className = 'alarm-icon-item';
         icon.innerText = '⏰';
@@ -809,12 +916,13 @@
       });
     }
 
-    function addAlarm(time, label) {
+    function addAlarm(time, label, sound) {
       if (!time) return;
       alarms.push({
         id: Date.now(),
         time: time,
         label: label,
+        sound: sound,
         triggered: false
       });
       renderAlarms();
@@ -825,6 +933,12 @@
       renderAlarms();
     }
 
+    // --- 隨機抽取《靈命日糧》經文 ---
+    function getRandomVerse() {
+      const randomIndex = Math.floor(Math.random() * dailyBreadVerses.length);
+      return dailyBreadVerses[randomIndex];
+    }
+
     // --- 背景與經文輪播 ---
     function switchBackground(index) {
       const layers = document.querySelectorAll('.bg-layer');
@@ -832,9 +946,10 @@
         layer.classList.toggle('active', idx === index);
       });
 
-      const currentData = quoteList[index % quoteList.length];
-      quoteTextEl.innerText = currentData.quote;
-      announcementTextEl.innerText = currentData.announcement;
+      // 當無自訂公告時，隨機輪播經文
+      if (!isCustomAnnouncementActive) {
+        quoteTextEl.innerText = getRandomVerse();
+      }
     }
 
     function nextBackground() {
@@ -855,7 +970,7 @@
       }
     }, 1000);
 
-    // --- 控制選單與事件監聽 ---
+    // --- 控制選單事件監聽 ---
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const btn24h = document.getElementById('btn24h');
@@ -864,8 +979,10 @@
     const btnNextBg = document.getElementById('btnNextBg');
     const btnFullscreen = document.getElementById('btnFullscreen');
     const btnAddAlarm = document.getElementById('btnAddAlarm');
+    const btnTestSound = document.getElementById('btnTestSound');
     const alarmTimeInput = document.getElementById('alarmTimeInput');
     const alarmLabelInput = document.getElementById('alarmLabelInput');
+    const alarmSoundSelect = document.getElementById('alarmSoundSelect');
     const announcementInput = document.getElementById('announcementInput');
 
     menuBtn.addEventListener('click', () => drawer.classList.toggle('open'));
@@ -895,15 +1012,28 @@
       nextBackground();
     });
 
+    btnTestSound.addEventListener('click', () => {
+      playAlarmSound(alarmSoundSelect.value);
+    });
+
     btnAddAlarm.addEventListener('click', () => {
-      addAlarm(alarmTimeInput.value, alarmLabelInput.value);
+      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value);
       alarmTimeInput.value = '';
       alarmLabelInput.value = '';
     });
 
+    // 輸入自訂公告時：暫停經文輪播並放大佔用整區
     announcementInput.addEventListener('input', (e) => {
-      if (e.target.value.trim() !== '') {
-        announcementTextEl.innerText = e.target.value;
+      const val = e.target.value.trim();
+      if (val !== '') {
+        isCustomAnnouncementActive = true;
+        quoteBox.classList.add('custom-active');
+        announcementTextEl.innerText = val;
+      } else {
+        isCustomAnnouncementActive = false;
+        quoteBox.classList.remove('custom-active');
+        announcementTextEl.innerText = "安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長";
+        quoteTextEl.innerText = getRandomVerse();
       }
     });
 
@@ -920,6 +1050,7 @@
     });
 
     // 初始化執行
+    quoteTextEl.innerText = getRandomVerse();
     updateClock();
   </script>
 </body>
