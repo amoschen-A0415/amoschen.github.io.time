@@ -345,15 +345,22 @@
       line-height: 1.2;
     }
 
+    /* 自訂公告全版模式（字體放大 250% + 低頻輕微閃爍） */
     .quote-box.custom-active .quote-text {
       display: none;
     }
 
     .quote-box.custom-active .announcement-text {
-      font-size: clamp(3.8rem, 7vh, 6rem);
+      font-size: clamp(4.5rem, 9.5vh, 8.5rem);
       color: #FFD580;
       margin-top: 0;
       text-align: center;
+      animation: slowBlink 3s infinite ease-in-out;
+    }
+
+    @keyframes slowBlink {
+      0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255, 213, 128, 0.8); }
+      50% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 213, 128, 0.2); }
     }
 
     /* 螢幕最右下角的背景切換鈕 */
@@ -580,10 +587,14 @@
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定</div>
       <div class="btn-row" style="gap:5px;">
+        <select id="alarmPeriodSelect" class="select-field" style="flex:1.2; display:none;">
+          <option value="AM">AM 上午</option>
+          <option value="PM">PM 下午</option>
+        </select>
         <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
-        <input type="text" id="alarmLabelInput" class="input-field" placeholder="範例：晨禱提醒 / 食物箱發放" style="flex:2;">
+        <input type="text" id="alarmLabelInput" class="input-field" placeholder="範例：晨禱提醒 / 食物箱發放" style="flex:2.5;">
       </div>
-      <div class="field-hint">時間格式範例：07:30 或 14:00</div>
+      <div class="field-hint" id="alarmTimeHint">時間格式範例：07:30 或 14:00</div>
       
       <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲與持續秒數</div>
       <div class="btn-row" style="gap:5px;">
@@ -807,7 +818,7 @@
       "「在患難中要忍耐，禱告要恆心。」— 羅馬書 12:12",
       "「少種的少收，多種的多收，這話是真的。」— 哥林多後書 9:6",
       "「我們行善，不可喪志；若不灰心，到了時候就要收成。」— 加拉太書 6:9",
-      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖撒羅尼迦前書 5:16-18",
+      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖煞羅尼迦前書 5:16-18",
       "「但願使人有盼望的神，因信將諸般的喜樂、平安充滿你們的心。」— 羅馬書 15:13",
       "「耶和華必為你們爭戰，你們只管靜默，不要作聲。」— 出埃及記 14:14",
       "「神為愛祂的人所預備的是眼睛未曾看見，耳朵未曾聽見的。」— 哥林多前書 2:9",
@@ -829,7 +840,7 @@
     let bgIndex = 0;
     const cycleDuration = 30; // 30 秒輪播
     let secondsElapsed = 0;
-    let alarms = []; // 鬧鐘陣列 [{ id, time, label, sound, duration, triggered }]
+    let alarms = []; // 鬧鐘陣列 [{ id, time24, label, sound, duration, triggered }]
     let activeRingingTimer = null;
     let activeRingingAlarmId = null;
     let isCustomAnnouncementActive = false;
@@ -897,6 +908,46 @@
     const alarmList = document.getElementById('alarmList');
     const alarmModal = document.getElementById('alarmModal');
     const alarmModalDesc = document.getElementById('alarmModalDesc');
+    const alarmPeriodSelect = document.getElementById('alarmPeriodSelect');
+    const alarmTimeHint = document.getElementById('alarmTimeHint');
+
+    // 更新鬧鐘輸入UI引導
+    function updateAlarmInputUI() {
+      if (is24Hour) {
+        alarmPeriodSelect.style.display = 'none';
+        alarmTimeHint.innerText = '時間格式範例：07:30 或 14:00 (24小時制)';
+      } else {
+        alarmPeriodSelect.style.display = 'block';
+        alarmTimeHint.innerText = '時間格式範例：07:30 (請選擇 AM 上午 或 PM 下午)';
+      }
+      renderAlarms();
+    }
+
+    // 將時間轉為 24 小時制格式 HH:MM 儲存
+    function parseTo24HourFormat(timeVal, periodVal) {
+      if (!timeVal) return null;
+      let [h, m] = timeVal.split(':').map(Number);
+      if (isNaN(h) || isNaN(m)) return null;
+
+      if (!is24Hour) {
+        if (periodVal === 'PM' && h < 12) h += 12;
+        if (periodVal === 'AM' && h === 12) h = 0;
+      }
+
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    // 格式化顯示時間（依照當前 12H/24H 模式）
+    function formatAlarmDisplay(time24) {
+      let [h, m] = time24.split(':').map(Number);
+      if (is24Hour) {
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+      } else {
+        const period = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return `${period} ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+      }
+    }
 
     // --- 時間與鬧鐘監測 ---
     function updateClock() {
@@ -905,7 +956,7 @@
       const m = String(now.getMinutes()).padStart(2, '0');
       const s = String(now.getSeconds()).padStart(2, '0');
 
-      const currentTimeStr = `${String(h).padStart(2, '0')}:${m}`;
+      const current24HourStr = `${String(now.getHours()).padStart(2, '0')}:${m}`;
 
       if (!is24Hour) {
         ampmTag.innerText = h >= 12 ? 'PM' : 'AM';
@@ -929,31 +980,29 @@
       // 鬧鐘響鈴偵測
       if (s === '00') {
         alarms.forEach(alarm => {
-          if (alarm.time === currentTimeStr && !alarm.triggered) {
+          if (alarm.time24 === current24HourStr && !alarm.triggered) {
             triggerAlarm(alarm);
           }
         });
       }
     }
 
-    // 觸發鬧鐘響鈴 (放大3倍、震動閃爍，並支援時間到達或手動點擊停止)
     function triggerAlarm(alarm) {
       alarm.triggered = true;
       activeRingingAlarmId = alarm.id;
 
-      // 在中央鬧鐘圖示上套用放大 3 倍與震動效果
       const iconEl = document.getElementById(`alarm-icon-${alarm.id}`);
       if (iconEl) {
         iconEl.classList.add('ringing');
       }
 
-      alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${alarm.time})` : `鬧鐘時間 (${alarm.time}) 到了！`;
+      const displayTime = formatAlarmDisplay(alarm.time24);
+      alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${displayTime})` : `鬧鐘時間 (${displayTime}) 到了！`;
       alarmModal.classList.add('active');
 
       let elapsedSeconds = 0;
       const duration = parseInt(alarm.duration) || 30;
 
-      // 響鈴循環與計時器
       activeRingingTimer = setInterval(() => {
         playAlarmSound(alarm.sound);
         elapsedSeconds += 2;
@@ -964,7 +1013,6 @@
       }, 2000);
     }
 
-    // 停止鬧鐘響鈴
     function stopRinging(alarmId) {
       if (activeRingingTimer) {
         clearInterval(activeRingingTimer);
@@ -991,10 +1039,11 @@
       alarmIconsContainer.innerHTML = '';
 
       alarms.forEach((alarm) => {
+        const displayTime = formatAlarmDisplay(alarm.time24);
         const item = document.createElement('div');
         item.className = 'alarm-item';
         item.innerHTML = `
-          <div class="alarm-time-label">⏰ ${alarm.time} (${alarm.duration}s) <span style="font-size:0.85rem; color:#F5A623;">${alarm.label ? ' - ' + alarm.label : ''}</span></div>
+          <div class="alarm-time-label">⏰ ${displayTime} (${alarm.duration}s) <span style="font-size:0.85rem; color:#F5A623;">${alarm.label ? ' - ' + alarm.label : ''}</span></div>
           <button class="alarm-delete-btn" onclick="deleteAlarm(${alarm.id})">刪除</button>
         `;
         alarmList.appendChild(item);
@@ -1003,18 +1052,19 @@
         icon.className = 'alarm-icon-item';
         icon.id = `alarm-icon-${alarm.id}`;
         icon.innerText = '⏰';
-        icon.title = `鬧鐘: ${alarm.time} ${alarm.label} (點擊關閉鬧鐘)`;
-        // 點擊鬧鐘圖示即可立即關閉鬧鐘
+        icon.title = `鬧鐘: ${displayTime} ${alarm.label} (點擊關閉鬧鐘)`;
         icon.addEventListener('click', () => stopRinging(alarm.id));
         alarmIconsContainer.appendChild(icon);
       });
     }
 
-    function addAlarm(time, label, sound, duration) {
-      if (!time) return;
+    function addAlarm(timeVal, periodVal, label, sound, duration) {
+      const time24 = parseTo24HourFormat(timeVal, periodVal);
+      if (!time24) return;
+
       alarms.push({
         id: Date.now(),
-        time: time,
+        time24: time24,
         label: label,
         sound: sound,
         duration: duration,
@@ -1033,6 +1083,7 @@
     ampmTag.addEventListener('click', () => {
       is24Hour = !is24Hour;
       updateClock();
+      updateAlarmInputUI();
     });
 
     // --- 隨機抽取《靈命日糧》經文 ---
@@ -1096,12 +1147,12 @@
     });
 
     btnAddAlarm.addEventListener('click', () => {
-      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
+      addAlarm(alarmTimeInput.value, alarmPeriodSelect.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
       alarmTimeInput.value = '';
       alarmLabelInput.value = '';
     });
 
-    // 輸入自訂公告時：暫停經文輪播並放大佔用整區
+    // 輸入自訂公告時：暫停經文輪播並放大佔用整區 (250% + 低頻閃爍)
     announcementInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
       if (val !== '') {
@@ -1131,6 +1182,7 @@
     // 初始化執行
     quoteTextEl.innerText = getRandomVerse();
     updateClock();
+    updateAlarmInputUI();
   </script>
 </body>
 </html>
