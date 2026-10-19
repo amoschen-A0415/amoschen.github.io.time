@@ -77,14 +77,14 @@
       padding: 1.2vh 2vw;
     }
 
-    /* 頂部標題列 (區域向下擴張給予 Logo 充足空間) */
+    /* 頂部標題列 */
     header {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 36px;
-      background: rgba(0, 30, 60, 0.6);
+      padding: 16px 36px;
+      background: rgba(0, 30, 60, 0.65);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-radius: 20px;
@@ -94,13 +94,13 @@
 
     .brand-section { display: flex; align-items: center; gap: 28px; }
     
-    /* 官方 Logo 區塊擴張 */
+    /* 重新設計的安得烈官方 Logo 容器 */
     .official-logo-box {
       height: 110px;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 0 18px rgba(245, 166, 35, 0.5));
+      filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.4));
     }
 
     .brand-titles { display: flex; flex-direction: column; }
@@ -197,23 +197,28 @@
       transform: scale(1.1);
     }
 
-    .alarm-icons-container { display: flex; flex-direction: column; gap: 12px; align-items: center; justify-content: center; }
+    .alarm-icons-container { display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
     .alarm-icon-item {
-      font-size: clamp(2.5rem, 6vh, 5rem);
+      font-size: clamp(2.5rem, 6vh, 4.5rem);
       animation: pulseAlarm 2s infinite alternate;
       filter: drop-shadow(0 0 10px var(--accent-gold));
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
+    /* 鬧鐘響鈴時不顯示彈窗，但鬧鐘圖示放大 3 倍並劇烈動態提醒點擊 */
     .alarm-icon-item.ringing {
-      font-size: clamp(7.5rem, 18vh, 15vw) !important;
-      animation: alarmRinging 0.15s infinite alternate !important;
-      filter: drop-shadow(0 0 35px #FF3333) !important;
-      z-index: 50;
+      font-size: clamp(8rem, 20vh, 16vw) !important;
+      animation: alarmRinging 0.2s infinite alternate !important;
+      filter: drop-shadow(0 0 45px #FF2222) !important;
+      z-index: 100;
+      cursor: pointer;
     }
 
-    @keyframes alarmRinging { 0% { transform: scale(1) rotate(-15deg); opacity: 1; } 100% { transform: scale(1.2) rotate(15deg); opacity: 0.8; } }
+    @keyframes alarmRinging {
+      0% { transform: scale(1) rotate(-18deg); opacity: 1; }
+      100% { transform: scale(1.25) rotate(18deg); opacity: 0.85; }
+    }
     @keyframes pulseAlarm { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.18); opacity: 1; } }
     @keyframes pulseColon { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
@@ -235,12 +240,11 @@
 
     .quote-box {
       width: 100%;
-      background: rgba(0, 25, 50, 0.65);
+      background: rgba(1, 18, 38, 0.82);
       border-left: 10px solid var(--accent-gold);
       padding: 18px 36px;
       border-radius: 0 20px 20px 0;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
       min-height: 15vh;
       display: flex; flex-direction: column; justify-content: center;
     }
@@ -248,15 +252,29 @@
     .quote-text { font-size: clamp(1.8rem, 3.2vh, 2.6rem); font-weight: 700; color: #E2EFFC; letter-spacing: 1.5px; line-height: 1.35; transition: opacity 0.5s ease; }
     .announcement-text { font-size: clamp(2.8rem, 5vh, 4.2rem); font-weight: 900; color: var(--warm-amber); margin-top: 8px; letter-spacing: 2px; text-shadow: 0 3px 12px rgba(0,0,0,0.8); line-height: 1.2; }
 
-    /* 自訂公告全版模式 (字體放大至 350% + 低頻輕微閃爍) */
+    /* 自訂公告全版模式 (字體 350% 顯眼清晰防模糊) */
     .quote-box.custom-active .quote-text { display: none; }
     .quote-box.custom-active .announcement-text {
-      font-size: clamp(6rem, 13vh, 11rem);
-      color: #FFD580; margin-top: 0; text-align: center;
-      animation: slowBlink 3s infinite ease-in-out;
+      font-size: clamp(5.5rem, 12vh, 10.5rem);
+      font-weight: 900;
+      color: #FFD700;
+      margin-top: 0;
+      text-align: center;
+      letter-spacing: 4px;
+      /* 清晰硬邊陰影，解決深色背景上的毛邊模糊感 */
+      text-shadow: 
+        0 4px 0 #000,
+        0 -4px 0 #000,
+        4px 0 0 #000,
+        -4px 0 0 #000,
+        0 0 30px rgba(255, 215, 0, 0.7);
+      animation: slowBlink 3.5s infinite ease-in-out;
     }
 
-    @keyframes slowBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 25px rgba(255, 213, 128, 0.8); } 50% { opacity: 0.65; text-shadow: 0 0 8px rgba(255, 213, 128, 0.2); } }
+    @keyframes slowBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
 
     /* 右下角純右箭頭按鈕 */
     .bg-switch-btn {
@@ -307,18 +325,6 @@
     .alarm-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--accent-gold); }
     .alarm-time-label { font-size: 0.95rem; font-weight: bold; color: #FFF; }
     .alarm-delete-btn { background: #ff4d4d; border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
-
-    /* 鬧鐘響鈴 Modal */
-    .alarm-modal {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(2, 16, 35, 0.96); border: 3px solid var(--accent-gold);
-      box-shadow: 0 0 50px rgba(245, 166, 35, 0.6); padding: 40px; border-radius: 24px;
-      z-index: 200; text-align: center; display: none; opacity: 0; transition: all 0.3s ease;
-    }
-
-    .alarm-modal.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    .alarm-modal-title { font-size: 3rem; color: var(--accent-gold); margin-bottom: 15px; }
-    .alarm-modal-desc { font-size: 2rem; color: #FFF; margin-bottom: 25px; }
   </style>
 </head>
 <body>
@@ -331,13 +337,9 @@
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定 (下拉選單)</div>
       <div class="btn-row" style="gap:5px;">
-        <select id="alarmHourSelect" class="select-field" style="flex:1;">
-          <!-- 動態生成 00 ~ 23 小時 -->
-        </select>
+        <select id="alarmHourSelect" class="select-field" style="flex:1;"></select>
         <span style="align-self: center; font-weight: bold;">:</span>
-        <select id="alarmMinuteSelect" class="select-field" style="flex:1;">
-          <!-- 動態生成 00 ~ 59 分鐘 -->
-        </select>
+        <select id="alarmMinuteSelect" class="select-field" style="flex:1;"></select>
       </div>
       <input type="text" id="alarmLabelInput" class="input-field" placeholder="標籤範例：晨禱提醒 / 食物箱發放" style="margin-top: 4px;">
       
@@ -371,12 +373,6 @@
     <div class="control-group" style="margin-top: auto; padding-top: 10px;">
       <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
     </div>
-  </div>
-
-  <div class="alarm-modal" id="alarmModal">
-    <div class="alarm-modal-title">⏰ 鬧鐘提醒</div>
-    <div class="alarm-modal-desc" id="alarmModalDesc">時間到了！</div>
-    <button class="btn" id="btnCloseAlarm" style="background: var(--accent-gold); color: #000; font-size: 1.5rem; padding: 10px 30px;">關閉鬧鐘</button>
   </div>
 
   <div class="bg-stage">
@@ -417,28 +413,34 @@
   <div class="clock-app-container">
     <header>
       <div class="brand-section">
-        <!-- 下拉擴張的完整標誌區域，確保麥穗、愛心、魚有充分空間展現 -->
+        <!-- 參照安得烈官網標誌重繪 (精確比例、間距與三傾斜方塊圖騰) -->
         <div class="official-logo-box">
-          <svg width="180" height="105" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g transform="rotate(-7, 50, 35)">
-              <rect x="5" y="5" width="82" height="78" rx="4" fill="#8C531B"/>
-              <path d="M18 72 Q 42 45 70 14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
-              <path d="M 32 52 Q 18 44 20 36 Q 34 42 37 50 Z" fill="#FFFFFF"/>
-              <path d="M 38 48 Q 52 40 54 31 Q 40 34 36 45 Z" fill="#FFFFFF"/>
-              <path d="M 45 38 Q 31 30 33 21 Q 47 27 48 35 Z" fill="#FFFFFF"/>
-              <path d="M 52 33 Q 66 23 68 15 Q 54 18 49 29 Z" fill="#FFFFFF"/>
-              <path d="M 58 23 Q 48 13 50 6 Q 62 12 61 20 Z" fill="#FFFFFF"/>
+          <svg width="210" height="110" viewBox="0 0 240 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 1. 左側：麥穗與稻浪方塊 (咖啡色) -->
+            <g transform="translate(10, 15) rotate(-8, 45, 45)">
+              <rect x="0" y="0" width="82" height="82" rx="10" fill="#8C531B"/>
+              <!-- 麥穗主幹 -->
+              <path d="M 18 70 C 35 50 55 30 70 12" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <!-- 麥穗葉粒 -->
+              <path d="M 30 52 Q 16 44 18 34 Q 32 40 35 48 Z" fill="#FFFFFF"/>
+              <path d="M 38 45 Q 52 38 54 28 Q 40 31 36 42 Z" fill="#FFFFFF"/>
+              <path d="M 45 35 Q 31 27 33 17 Q 47 23 48 32 Z" fill="#FFFFFF"/>
+              <path d="M 52 28 Q 66 18 68 8 Q 54 11 49 24 Z" fill="#FFFFFF"/>
             </g>
-            <g transform="rotate(7, 150, 35)">
-              <rect x="102" y="8" width="82" height="78" rx="4" fill="#7FA827"/>
-              <path d="M143 64 C126 48 116 34 132 23 C143 15 153 26 156 29 C159 26 169 15 180 23 C196 34 186 48 169 64 L156 75 Z" fill="#FFFFFF"/>
+
+            <!-- 2. 右上：愛心與和平雙手方塊 (綠色) -->
+            <g transform="translate(125, 5) rotate(8, 45, 45)">
+              <rect x="0" y="0" width="82" height="82" rx="10" fill="#7FA827"/>
+              <!-- 愛心圖案 -->
+              <path d="M 41 68 C 22 50 10 35 26 22 C 38 12 41 26 41 26 C 41 26 44 12 56 22 C 72 35 60 50 41 68 Z" fill="#FFFFFF"/>
             </g>
-            <g transform="rotate(-12, 45, 95)">
-              <rect x="8" y="75" width="78" height="82" rx="4" fill="#A06822"/>
-              <g transform="translate(20, 86) rotate(-38) scale(0.72)">
-                <path d="M 10 30 Q 38 3 75 30 Q 38 57 10 30 Z" fill="#7FA827"/>
-                <path d="M 10 30 L -12 12 L -6 30 L -12 48 Z" fill="#7FA827"/>
-              </g>
+
+            <!-- 3. 左下：小魚與慈善方塊 (金褐色) -->
+            <g transform="translate(45, 68) rotate(-12, 40, 40)">
+              <rect x="0" y="0" width="76" height="76" rx="10" fill="#A06822"/>
+              <!-- 聖經魚形標誌 (Ichthys) -->
+              <path d="M 15 38 Q 38 12 65 38 Q 38 64 15 38 Z" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+              <path d="M 18 38 L 5 22 M 18 38 L 5 54" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
             </g>
           </svg>
         </div>
@@ -525,7 +527,7 @@
       "「我留下平安給你們；我將我的平安賜給你們。」— 約翰福音 14:27",
       "「神是我們的避難所，是我們的力量，是我們在患難中隨時的幫助。」— 詩篇 46:1",
       "「堅心倚賴你的，你必保守他十分平安，因為他倚靠你。」— 以賽亞書 26:3",
-      "「凡事謙虛、溫柔、忍耐，用愛心互相寬容。」— 以弗所書 4:2",
+      "「凡事謙虛、溫柔, 忍耐，用愛心互相寬容。」— 以弗所書 4:2",
       "「主是我在急難中的力量，是我心中的磐石。」— 詩篇 73:26",
       "「要彼此相愛，像我愛你們一樣；這是我的命令。」— 約翰福音 15:12",
       "「主的恩典乃是一生之久；一宿雖有哭泣，早晨便必歡呼。」— 詩篇 30:5",
@@ -538,8 +540,7 @@
     const cycleDuration = 30;
     let secondsElapsed = 0;
     let alarms = [];
-    let activeRingingTimer = null;
-    let activeRingingAlarmId = null;
+    let ringingTimers = {}; // 改為物件紀錄每個響鈴中的鬧鐘計時器
     let isCustomAnnouncementActive = false;
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -576,12 +577,9 @@
     const announcementTextEl = document.getElementById('announcementText');
     const alarmIconsContainer = document.getElementById('alarmIconsContainer');
     const alarmList = document.getElementById('alarmList');
-    const alarmModal = document.getElementById('alarmModal');
-    const alarmModalDesc = document.getElementById('alarmModalDesc');
     const alarmHourSelect = document.getElementById('alarmHourSelect');
     const alarmMinuteSelect = document.getElementById('alarmMinuteSelect');
 
-    // 動態填入鬧鐘小時 (00~23) 與分鐘 (00~59) 選項
     function initAlarmSelects() {
       alarmHourSelect.innerHTML = '';
       alarmMinuteSelect.innerHTML = '';
@@ -589,7 +587,7 @@
         const val = String(i).padStart(2, '0');
         alarmHourSelect.innerHTML += `<option value="${val}">${val} 時</option>`;
       }
-      for (let i = 0; i < 60; i += 5) { // 每 5 分鐘為間隔
+      for (let i = 0; i < 60; i += 5) {
         const val = String(i).padStart(2, '0');
         alarmMinuteSelect.innerHTML += `<option value="${val}">${val} 分</option>`;
       }
@@ -649,36 +647,36 @@
     ampmTag.addEventListener('click', toggleTimeFormat);
     ampmTag.addEventListener('touchstart', toggleTimeFormat, {passive: true});
 
+    // 觸發鬧鐘（不跳彈窗，透過圖示放大 3 倍與紅光動畫提醒點擊關閉）
     function triggerAlarm(alarm) {
       alarm.triggered = true;
-      activeRingingAlarmId = alarm.id;
       const iconEl = document.getElementById(`alarm-icon-${alarm.id}`);
-      if (iconEl) iconEl.classList.add('ringing');
-
-      const displayTime = formatAlarmDisplay(alarm.time24);
-      alarmModalDesc.innerText = alarm.label ? `鬧鐘：${alarm.label} (${displayTime})` : `鬧鐘時間 (${displayTime}) 到了！`;
-      alarmModal.classList.add('active');
+      if (iconEl) {
+        iconEl.classList.add('ringing');
+      }
 
       let elapsedSeconds = 0;
       const duration = parseInt(alarm.duration) || 30;
 
-      activeRingingTimer = setInterval(() => {
+      ringingTimers[alarm.id] = setInterval(() => {
         playAlarmSound(alarm.sound);
         elapsedSeconds += 2;
-        if (elapsedSeconds >= duration) stopRinging(alarm.id);
+        if (elapsedSeconds >= duration) {
+          stopRinging(alarm.id);
+        }
       }, 2000);
     }
 
     function stopRinging(alarmId) {
-      if (activeRingingTimer) { clearInterval(activeRingingTimer); activeRingingTimer = null; }
+      if (ringingTimers[alarmId]) {
+        clearInterval(ringingTimers[alarmId]);
+        delete ringingTimers[alarmId];
+      }
       const iconEl = document.getElementById(`alarm-icon-${alarmId}`);
-      if (iconEl) iconEl.classList.remove('ringing');
-      alarmModal.classList.remove('active');
+      if (iconEl) {
+        iconEl.classList.remove('ringing');
+      }
     }
-
-    document.getElementById('btnCloseAlarm').addEventListener('click', () => {
-      if (activeRingingAlarmId) stopRinging(activeRingingAlarmId);
-    });
 
     function renderAlarms() {
       alarmList.innerHTML = '';
@@ -698,7 +696,9 @@
         icon.className = 'alarm-icon-item';
         icon.id = `alarm-icon-${alarm.id}`;
         icon.innerText = '⏰';
-        icon.title = `鬧鐘: ${displayTime} ${alarm.label} (點擊關閉鬧鐘)`;
+        icon.title = `鬧鐘: ${displayTime} ${alarm.label} (點擊即可關閉鬧鐘)`;
+        
+        // 直觀點擊圖示即可直接停止響鈴
         icon.addEventListener('click', () => stopRinging(alarm.id));
         alarmIconsContainer.appendChild(icon);
       });
