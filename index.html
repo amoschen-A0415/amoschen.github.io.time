@@ -77,14 +77,14 @@
       padding: 1.2vh 2vw;
     }
 
-    /* 頂部標題列 */
+    /* 頂部標題列 (區域向下擴張給予 Logo 充足空間) */
     header {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 32px;
-      background: rgba(0, 30, 60, 0.55);
+      padding: 18px 36px;
+      background: rgba(0, 30, 60, 0.6);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-radius: 20px;
@@ -92,27 +92,36 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
 
-    .brand-section { display: flex; align-items: center; gap: 24px; }
-    .official-logo-box { height: 85px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 0 15px rgba(245, 166, 35, 0.5)); }
+    .brand-section { display: flex; align-items: center; gap: 28px; }
+    
+    /* 官方 Logo 區塊擴張 */
+    .official-logo-box {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 18px rgba(245, 166, 35, 0.5));
+    }
+
     .brand-titles { display: flex; flex-direction: column; }
 
     .brand-title-main {
-      font-size: clamp(2.5rem, 4.2vh, 3.8rem);
+      font-size: clamp(2.6rem, 4.4vh, 4rem);
       font-weight: 900;
       letter-spacing: 3px;
       background: linear-gradient(180deg, #FFFFFF 0%, #E0EBF5 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 3px 12px rgba(0,0,0,0.6);
-      line-height: 1.1;
+      line-height: 1.15;
     }
 
     .brand-title-sub {
-      font-size: clamp(1.2rem, 2vh, 1.8rem);
+      font-size: clamp(1.2rem, 2.1vh, 1.9rem);
       color: var(--accent-gold);
       letter-spacing: 2px;
       font-weight: 700;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .date-lunar-display { text-align: right; }
@@ -123,7 +132,7 @@
     .main-clock-card {
       position: relative;
       width: 100%;
-      height: 56vh;
+      height: 52vh;
       background: var(--glass-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -145,7 +154,7 @@
 
     .time-hm {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: clamp(14rem, 42vh, 38vw);
+      font-size: clamp(13rem, 38vh, 35vw);
       font-weight: 700;
       line-height: 0.75;
       letter-spacing: -0.01em;
@@ -163,7 +172,7 @@
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
     }
 
-    /* 12H/24H 互動標籤（層級提升與事件確保） */
+    /* 12H/24H 互動標籤 */
     .ampm-tag {
       position: absolute;
       top: 2.5vh; left: 2.5vw;
@@ -232,21 +241,22 @@
       border-radius: 0 20px 20px 0;
       backdrop-filter: blur(14px);
       box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-      min-height: 13vh;
+      min-height: 15vh;
       display: flex; flex-direction: column; justify-content: center;
     }
 
     .quote-text { font-size: clamp(1.8rem, 3.2vh, 2.6rem); font-weight: 700; color: #E2EFFC; letter-spacing: 1.5px; line-height: 1.35; transition: opacity 0.5s ease; }
     .announcement-text { font-size: clamp(2.8rem, 5vh, 4.2rem); font-weight: 900; color: var(--warm-amber); margin-top: 8px; letter-spacing: 2px; text-shadow: 0 3px 12px rgba(0,0,0,0.8); line-height: 1.2; }
 
+    /* 自訂公告全版模式 (字體放大至 350% + 低頻輕微閃爍) */
     .quote-box.custom-active .quote-text { display: none; }
     .quote-box.custom-active .announcement-text {
-      font-size: clamp(4.5rem, 9.5vh, 8.5rem);
+      font-size: clamp(6rem, 13vh, 11rem);
       color: #FFD580; margin-top: 0; text-align: center;
       animation: slowBlink 3s infinite ease-in-out;
     }
 
-    @keyframes slowBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(255, 213, 128, 0.8); } 50% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 213, 128, 0.2); } }
+    @keyframes slowBlink { 0%, 100% { opacity: 1; text-shadow: 0 0 25px rgba(255, 213, 128, 0.8); } 50% { opacity: 0.65; text-shadow: 0 0 8px rgba(255, 213, 128, 0.2); } }
 
     /* 右下角純右箭頭按鈕 */
     .bg-switch-btn {
@@ -292,7 +302,6 @@
 
     .input-field, .select-field { width: 100%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; border-radius: 8px; font-size: 0.95rem; }
     .select-field option { background: #041224; color: white; }
-    .field-hint { font-size: 0.8rem; color: #8CA0B8; margin-top: -4px; }
 
     .alarm-list { display: flex; flex-direction: column; gap: 8px; max-height: 140px; overflow-y: auto; }
     .alarm-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--accent-gold); }
@@ -320,12 +329,17 @@
     <div class="drawer-title">顯示與鬧鐘設定</div>
 
     <div class="control-group">
-      <div class="control-label">新增鬧鐘設定</div>
+      <div class="control-label">新增鬧鐘設定 (下拉選單)</div>
       <div class="btn-row" style="gap:5px;">
-        <input type="time" id="alarmTimeInput" class="input-field" style="flex:2;">
-        <input type="text" id="alarmLabelInput" class="input-field" placeholder="範例：晨禱提醒 / 食物箱發放" style="flex:2.5;">
+        <select id="alarmHourSelect" class="select-field" style="flex:1;">
+          <!-- 動態生成 00 ~ 23 小時 -->
+        </select>
+        <span style="align-self: center; font-weight: bold;">:</span>
+        <select id="alarmMinuteSelect" class="select-field" style="flex:1;">
+          <!-- 動態生成 00 ~ 59 分鐘 -->
+        </select>
       </div>
-      <div class="field-hint">選擇發響時間 (系統自動轉換儲存)</div>
+      <input type="text" id="alarmLabelInput" class="input-field" placeholder="標籤範例：晨禱提醒 / 食物箱發放" style="margin-top: 4px;">
       
       <div class="control-label" style="margin-top: 5px;">鬧鐘鈴聲與持續秒數</div>
       <div class="btn-row" style="gap:5px;">
@@ -403,8 +417,9 @@
   <div class="clock-app-container">
     <header>
       <div class="brand-section">
+        <!-- 下拉擴張的完整標誌區域，確保麥穗、愛心、魚有充分空間展現 -->
         <div class="official-logo-box">
-          <svg width="150" height="85" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="180" height="105" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="rotate(-7, 50, 35)">
               <rect x="5" y="5" width="82" height="78" rx="4" fill="#8C531B"/>
               <path d="M18 72 Q 42 45 70 14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
@@ -501,7 +516,7 @@
       "「在患難中要忍耐，禱告要恆心。」— 羅馬書 12:12",
       "「少種的少收，多種的多收，這話是真的。」— 哥林多後書 9:6",
       "「我們行善，不可喪志；若不灰心，到了時候就要收成。」— 加拉太書 6:9",
-      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖撒羅尼迦前書 5:16-18",
+      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖煞羅尼迦前書 5:16-18",
       "「但願使人有盼望的神，因信將諸般的喜樂、平安充滿你們的心。」— 羅馬書 15:13",
       "「耶和華必為你們爭戰，你們只管靜默，不要作聲。」— 出埃及記 14:14",
       "「神為愛祂的人所預備的是眼睛未曾看見，耳朵未曾聽見的。」— 哥林多前書 2:9",
@@ -517,7 +532,7 @@
       "「你們要嘗嘗主恩的滋味，便知祂是美善；投靠祂的人有福了！」— 詩篇 34:8"
     ];
 
-    let is24Hour = true; // 預設 24H 制
+    let is24Hour = true;
     let autoRotate = true;
     let bgIndex = 0;
     const cycleDuration = 30;
@@ -563,6 +578,22 @@
     const alarmList = document.getElementById('alarmList');
     const alarmModal = document.getElementById('alarmModal');
     const alarmModalDesc = document.getElementById('alarmModalDesc');
+    const alarmHourSelect = document.getElementById('alarmHourSelect');
+    const alarmMinuteSelect = document.getElementById('alarmMinuteSelect');
+
+    // 動態填入鬧鐘小時 (00~23) 與分鐘 (00~59) 選項
+    function initAlarmSelects() {
+      alarmHourSelect.innerHTML = '';
+      alarmMinuteSelect.innerHTML = '';
+      for (let i = 0; i < 24; i++) {
+        const val = String(i).padStart(2, '0');
+        alarmHourSelect.innerHTML += `<option value="${val}">${val} 時</option>`;
+      }
+      for (let i = 0; i < 60; i += 5) { // 每 5 分鐘為間隔
+        const val = String(i).padStart(2, '0');
+        alarmMinuteSelect.innerHTML += `<option value="${val}">${val} 分</option>`;
+      }
+    }
 
     function formatAlarmDisplay(time24) {
       let [h, m] = time24.split(':').map(Number);
@@ -608,7 +639,6 @@
       }
     }
 
-    // 核心切換切換事件監聽
     function toggleTimeFormat(e) {
       if (e) e.stopPropagation();
       is24Hour = !is24Hour;
@@ -674,11 +704,11 @@
       });
     }
 
-    function addAlarm(timeVal, label, sound, duration) {
-      if (!timeVal) return;
+    function addAlarm(hour, minute, label, sound, duration) {
+      const time24 = `${hour}:${minute}`;
       alarms.push({
         id: Date.now(),
-        time24: timeVal,
+        time24: time24,
         label: label,
         sound: sound,
         duration: duration,
@@ -726,7 +756,6 @@
     const btnFullscreen = document.getElementById('btnFullscreen');
     const btnAddAlarm = document.getElementById('btnAddAlarm');
     const btnTestSound = document.getElementById('btnTestSound');
-    const alarmTimeInput = document.getElementById('alarmTimeInput');
     const alarmLabelInput = document.getElementById('alarmLabelInput');
     const alarmSoundSelect = document.getElementById('alarmSoundSelect');
     const alarmDurationSelect = document.getElementById('alarmDurationSelect');
@@ -736,8 +765,8 @@
     btnTestSound.addEventListener('click', () => playAlarmSound(alarmSoundSelect.value));
 
     btnAddAlarm.addEventListener('click', () => {
-      addAlarm(alarmTimeInput.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
-      alarmTimeInput.value = ''; alarmLabelInput.value = '';
+      addAlarm(alarmHourSelect.value, alarmMinuteSelect.value, alarmLabelInput.value, alarmSoundSelect.value, alarmDurationSelect.value);
+      alarmLabelInput.value = '';
     });
 
     announcementInput.addEventListener('input', (e) => {
@@ -764,6 +793,7 @@
       }
     });
 
+    initAlarmSelects();
     quoteTextEl.innerText = getRandomVerse();
     updateClock();
   </script>
