@@ -363,7 +363,7 @@
       50% { opacity: 0.6; text-shadow: 0 0 5px rgba(255, 213, 128, 0.2); }
     }
 
-    /* 螢幕最右下角的背景切換鈕 */
+    /* 螢幕最右下角：純右箭頭背景切換鈕 */
     .bg-switch-btn {
       position: absolute;
       right: 1.5vw;
@@ -372,14 +372,15 @@
       background: rgba(0, 30, 60, 0.75);
       border: 2px solid var(--accent-gold);
       color: var(--accent-gold);
-      padding: 10px 18px;
-      border-radius: 30px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
       cursor: pointer;
-      font-size: 1.3rem;
+      font-size: 1.8rem;
       font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
       backdrop-filter: blur(10px);
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       transition: all 0.3s ease;
@@ -388,7 +389,7 @@
     .bg-switch-btn:hover {
       background: var(--accent-gold);
       color: #000;
-      transform: scale(1.08);
+      transform: scale(1.12);
     }
 
     /* 控制面板選單 */
@@ -771,10 +772,8 @@
         <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
       </div>
 
-      <!-- 大螢幕最右下角：背景切換按鈕 -->
-      <button class="bg-switch-btn" id="btnNextBgGlobal" title="切換下張背景與經文">
-        <span>換背景</span> 🖼️ ➔
-      </button>
+      <!-- 大螢幕最右下角：純右箭頭背景切換鈕 -->
+      <button class="bg-switch-btn" id="btnNextBgGlobal" title="切換下張背景與經文">➔</button>
     </footer>
 
   </div>
@@ -818,7 +817,7 @@
       "「在患難中要忍耐，禱告要恆心。」— 羅馬書 12:12",
       "「少種的少收，多種的多收，這話是真的。」— 哥林多後書 9:6",
       "「我們行善，不可喪志；若不灰心，到了時候就要收成。」— 加拉太書 6:9",
-      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖煞羅尼迦前書 5:16-18",
+      "「要常常喜樂，不住地禱告，凡事謝恩；因為這是神在基督耶穌裡向你們所定的旨意。」— 帖撒羅尼迦前書 5:16-18",
       "「但願使人有盼望的神，因信將諸般的喜樂、平安充滿你們的心。」— 羅馬書 15:13",
       "「耶和華必為你們爭戰，你們只管靜默，不要作聲。」— 出埃及記 14:14",
       "「神為愛祂的人所預備的是眼睛未曾看見，耳朵未曾聽見的。」— 哥林多前書 2:9",
@@ -911,7 +910,7 @@
     const alarmPeriodSelect = document.getElementById('alarmPeriodSelect');
     const alarmTimeHint = document.getElementById('alarmTimeHint');
 
-    // 更新鬧鐘輸入UI引導
+    // 更新鬧鐘輸入 UI 引導
     function updateAlarmInputUI() {
       if (is24Hour) {
         alarmPeriodSelect.style.display = 'none';
@@ -1079,7 +1078,7 @@
       renderAlarms();
     }
 
-    // --- 點擊 AM/PM 標籤切換 12/24 小時制 ---
+    // --- 點擊 AM/PM/24H 標籤切換 12/24 小時制 ---
     ampmTag.addEventListener('click', () => {
       is24Hour = !is24Hour;
       updateClock();
