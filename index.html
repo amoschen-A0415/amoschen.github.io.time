@@ -1,1 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社團法人中華安得烈慈善協會 - 全螢幕大字體數位時鐘</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #00529B;
+      --accent-gold: #F5A623;
+      --warm-amber: #FF9800;
+      --soft-white: #F8FAF9;
+      --glass-bg: rgba(7, 24, 48, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.25);
+      --shadow-color: rgba(0, 0, 0, 0.6);
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #031020;
+      color: var(--soft-white);
+    }
+
+    /* 牆面與動態背景 */
+    .bg-stage {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.02);
+    }
+
+    .bg-layer.active {
+      opacity: 1;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(3, 16, 32, 0.25) 0%, rgba(2, 10, 20, 0.8) 100%);
+      z-index: 2;
+    }
+
+    .bg-svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 主版面佈局 */
+    .clock-app-container {
+      position: relative;
+      z-index: 10;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2vh 2.5vw;
+    }
+
+    /* 頂部標題列 */
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 28px;
+      background: rgba(0, 30, 60, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* 官方 Logo 精確繪製容器 */
+    .official-logo-box {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.4));
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title-main {
+      font-size: 1.85rem;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #E0EBF5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .brand-title-sub {
+      font-size: 0.9rem;
+      color: var(--accent-gold);
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+
+    .date-lunar-display {
+      text-align: right;
+    }
+
+    .date-text {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+    }
+
+    .lunar-text {
+      font-size: 1.05rem;
+      color: #D1E3F8;
+      margin-top: 2px;
+    }
+
+    /* 核心時間框 (字體再放大 20%，適應 5-10 公尺視距) */
+    .main-clock-card {
+      position: relative;
+      width: 100%;
+      height: 72vh;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      padding: 0 1vw;
+    }
+
+    .time-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 時與分：字體整體放大 20% */
+    .time-hm {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: clamp(18rem, 50vh, 45vw);
+      font-weight: 700;
+      line-height: 0.75;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+      text-shadow: 
+        0 0 40px rgba(255, 255, 255, 0.25),
+        0 12px 35px rgba(0, 0, 0, 0.85);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+
+    .colon {
+      color: var(--accent-gold);
+      display: inline-block;
+      margin: 0 -0.01em;
+      animation: pulseColon 2s infinite;
+      text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
+    }
+
+    @keyframes pulseColon {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    /* 右下角秒數區塊 */
+    .seconds-badge {
+      position: absolute;
+      bottom: 2vh;
+      right: 2.5vw;
+      background: rgba(0, 20, 45, 0.75);
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 16px;
+      padding: 0.4vh 1.8vw;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+
+    .seconds-label {
+      font-size: 1.2rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .time-sec {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: clamp(3.2rem, 9.5vh, 7.5vw);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1;
+    }
+
+    .ampm-tag {
+      position: absolute;
+      top: 2.5vh;
+      left: 2.5vw;
+      font-size: clamp(1.8rem, 4.5vh, 3vw);
+      font-weight: 900;
+      color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 6px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(245, 166, 35, 0.4);
+      letter-spacing: 2px;
+    }
+
+    /* 底部標語與靈命日糧經文說明 */
+    footer {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quote-box {
+      width: 100%;
+      background: rgba(0, 25, 50, 0.55);
+      border-left: 6px solid var(--accent-gold);
+      padding: 12px 28px;
+      border-radius: 0 16px 16px 0;
+      backdrop-filter: blur(10px);
+      transition: all 0.5s ease;
+    }
+
+    .quote-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #E2EFFC;
+      letter-spacing: 1px;
+    }
+
+    .announcement-text {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--warm-amber);
+      margin-top: 4px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    /* 控制面板選單 */
+    .menu-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(0, 40, 80, 0.6);
+      border: 1px solid var(--glass-border);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s;
+      opacity: 0.3;
+    }
+
+    .menu-btn:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -360px;
+      width: 340px;
+      height: 100%;
+      background: rgba(4, 18, 36, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 90;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+      padding: 30px 25px;
+      transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      border-left: 1px solid var(--glass-border);
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-title {
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+      border-bottom: 2px solid rgba(245, 166, 35, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .control-label {
+      font-size: 0.95rem;
+      color: #B0C4DE;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn.active, .btn:hover {
+      background: var(--primary-blue);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--glass-border);
+      color: white;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-btn" id="menuToggle">⚙️</button>
+
+  <div class="drawer" id="drawer">
+    <div class="drawer-title">顯示設定</div>
+    
+    <div class="control-group">
+      <div class="control-label">時間制</div>
+      <div class="btn-row">
+        <button class="btn active" id="btn24h">24 小時制</button>
+        <button class="btn" id="btn12h">12 小時制</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">背景與經文輪播 (每30秒)</div>
+      <div class="btn-row">
+        <button class="btn active" id="btnPauseBg">自動播放</button>
+        <button class="btn" id="btnNextBg">切換下一張</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">自訂活動公告</div>
+      <input type="text" id="announcementInput" class="input-field" placeholder="請輸入欲顯示的公告文字...">
+    </div>
+
+    <div class="control-group" style="margin-top: auto;">
+      <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
+    </div>
+  </div>
+
+  <!-- 動態背景層 -->
+  <div class="bg-stage">
+    <div class="bg-layer active" id="bg1">
+      <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="bgG1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#021B38"/>
+            <stop offset="50%" stop-color="#003366"/>
+            <stop offset="100%" stop-color="#00152B"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bgG1)"/>
+        <circle cx="960" cy="540" r="480" fill="none" stroke="rgba(245, 166, 35, 0.08)" stroke-width="2"/>
+        <path d="M 0,800 Q 480,700 960,850 T 1920,750 L 1920,1080 L 0,1080 Z" fill="rgba(0, 82, 155, 0.3)"/>
+        <path d="M 0,850 Q 550,950 1100,820 T 1920,900 L 1920,1080 L 0,1080 Z" fill="rgba(245, 166, 35, 0.12)"/>
+      </svg>
+    </div>
+
+    <div class="bg-layer" id="bg2">
+      <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="bgG2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#0A2540"/>
+            <stop offset="60%" stop-color="#004080"/>
+            <stop offset="100%" stop-color="#051329"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bgG2)"/>
+        <path d="M-100,200 C 400,100 800,500 1920,100 L 1920,1080 L -100,1080 Z" fill="rgba(255, 152, 0, 0.08)"/>
+        <circle cx="300" cy="300" r="280" fill="rgba(0, 82, 155, 0.25)"/>
+      </svg>
+    </div>
+
+    <div class="bg-layer" id="bg3">
+      <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="bgG3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#001F3F"/>
+            <stop offset="50%" stop-color="#002D5A"/>
+            <stop offset="100%" stop-color="#081426"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bgG3)"/>
+        <polygon points="0,0 1920,1080 0,1080" fill="rgba(0, 82, 155, 0.15)"/>
+      </svg>
+    </div>
+
+    <div class="bg-layer" id="bg4">
+      <svg class="bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="bgG4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#051A30"/>
+            <stop offset="50%" stop-color="#032D55"/>
+            <stop offset="100%" stop-color="#010D1B"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bgG4)"/>
+        <circle cx="1600" cy="200" r="400" fill="rgba(245, 166, 35, 0.06)"/>
+      </svg>
+    </div>
+    
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- 主介面 -->
+  <div class="clock-app-container">
+    
+    <header>
+      <div class="brand-section">
+        <!-- 參照官方 Logo 重建高解析 SVG (麥穗、愛心、小魚) -->
+        <div class="official-logo-box">
+          <svg width="110" height="60" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 左上：褐色方塊與白麥穗 -->
+            <g transform="rotate(-7, 50, 35)">
+              <rect x="5" y="5" width="82" height="78" rx="4" fill="#8C531B"/>
+              <!-- 麥穗主幹與麥粒 -->
+              <path d="M18 72 Q 42 45 70 14" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <path d="M 32 52 Q 18 44 20 36 Q 34 42 37 50 Z" fill="#FFFFFF"/>
+              <path d="M 38 48 Q 52 40 54 31 Q 40 34 36 45 Z" fill="#FFFFFF"/>
+              <path d="M 45 38 Q 31 30 33 21 Q 47 27 48 35 Z" fill="#FFFFFF"/>
+              <path d="M 52 33 Q 66 23 68 15 Q 54 18 49 29 Z" fill="#FFFFFF"/>
+              <path d="M 58 23 Q 48 13 50 6 Q 62 12 61 20 Z" fill="#FFFFFF"/>
+            </g>
+
+            <!-- 右上：綠色方塊與白愛心 -->
+            <g transform="rotate(7, 150, 35)">
+              <rect x="102" y="8" width="82" height="78" rx="4" fill="#7FA827"/>
+              <path d="M143 64 C126 48 116 34 132 23 C143 15 153 26 156 29 C159 26 169 15 180 23 C196 34 186 48 169 64 L156 75 Z" fill="#FFFFFF"/>
+            </g>
+
+            <!-- 左下：黃褐色方塊與綠魚 -->
+            <g transform="rotate(-12, 45, 95)">
+              <rect x="8" y="75" width="78" height="82" rx="4" fill="#A06822"/>
+              <!-- 魚形 -->
+              <g transform="translate(20, 86) rotate(-38) scale(0.72)">
+                <path d="M 10 30 Q 38 3 75 30 Q 38 57 10 30 Z" fill="#7FA827"/>
+                <path d="M 10 30 L -12 12 L -6 30 L -12 48 Z" fill="#7FA827"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="brand-titles">
+          <span class="brand-title-main">社團法人中華安得烈慈善協會</span>
+          <span class="brand-title-sub">ANDREW CHARITY ASSOCIATION</span>
+        </div>
+      </div>
+
+      <div class="date-lunar-display">
+        <div class="date-text" id="dateText">2026年10月19日 星期一</div>
+        <div class="lunar-text" id="lunarText">農曆丙午年九月十日</div>
+      </div>
+    </header>
+
+    <!-- 核心時間框 (極致放大 20%) -->
+    <main class="main-clock-card">
+      <div class="ampm-tag" id="ampmTag" style="display: none;">AM</div>
+      
+      <div class="time-wrapper">
+        <div class="time-hm">
+          <span id="hours">09</span>
+          <span class="colon">:</span>
+          <span id="minutes">37</span>
+        </div>
+      </div>
+
+      <!-- 右下角秒數 -->
+      <div class="seconds-badge">
+        <span class="seconds-label">SEC</span>
+        <span class="time-sec" id="seconds">00</span>
+      </div>
+    </main>
+
+    <!-- 底部：官網標語 + 靈命日糧經文輪播 -->
+    <footer>
+      <div class="quote-box">
+        <div class="quote-text" id="quoteText">「攜手分擔困境，用愛點亮希望」</div>
+        <div class="announcement-text" id="announcementText">安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // --- 狀態控制 ---
+    let is24Hour = true;
+    let autoRotate = true;
+    let bgIndex = 0;
+    const cycleDuration = 30; // 30 秒輪播
+    let secondsElapsed = 0;
+
+    // 參照安得烈官網專案 + 靈命日糧聖經經文組合
+    const quoteList = [
+      {
+        quote: "「主耶和華的靈在我身上，因為耶和華用膏膏我，叫我傳好信息給貧窮的人。」— 以賽亞書 61:1",
+        announcement: "安得烈膳糧箱專案 — 陪伴弱勢孩童健康成長"
+      },
+      {
+        quote: "「攜手分擔困境，用愛點亮希望；慈愛與誠實彼此相遇，公義與平安彼此相親。」",
+        announcement: "培鷹計畫 — 助學金與才藝培育，翻轉弱勢學子未來"
+      },
+      {
+        quote: "「施比受更為有福。各人要隨本心所酌定的，不要作難，不要勉強，因為捐得樂意的人是神所喜愛的。」— 哥林多後書 9:7",
+        announcement: "長青膳糧箱專案 — 關懷長者健康，傳遞社會溫暖"
+      },
+      {
+        quote: "「凡你們所作的，都要憑愛心而作。各人不要單顧自己的事，也要顧別人的事。」— 腓立比書 2:4",
+        announcement: "安心計畫 — 急難救助與實物支援，守護困頓家庭"
+      }
+    ];
+
+    // --- DOM 元素 ---
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const ampmTag = document.getElementById('ampmTag');
+    const dateTextEl = document.getElementById('dateText');
+    const quoteTextEl = document.getElementById('quoteText');
+    const announcementTextEl = document.getElementById('announcementText');
+
+    // --- 時間與日期更新 ---
+    function updateClock() {
+      const now = new Date();
+      let h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+
+      if (!is24Hour) {
+        ampmTag.style.display = 'block';
+        ampmTag.innerText = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+      } else {
+        ampmTag.style.display = 'none';
+      }
+
+      hoursEl.innerText = String(h).padStart(2, '0');
+      minutesEl.innerText = m;
+      secondsEl.innerText = s;
+
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      const dayName = days[now.getDay()];
+
+      dateTextEl.innerText = `${year}年${month}月${date}日 ${dayName}`;
+    }
+
+    // --- 背景與經文同步切換 ---
+    function switchBackground(index) {
+      const layers = document.querySelectorAll('.bg-layer');
+      layers.forEach((layer, idx) => {
+        layer.classList.toggle('active', idx === index);
+      });
+
+      // 同步切換靈命日糧經文與官網公告
+      const currentData = quoteList[index % quoteList.length];
+      quoteTextEl.innerText = currentData.quote;
+      announcementTextEl.innerText = currentData.announcement;
+    }
+
+    function nextBackground() {
+      const totalBgs = document.querySelectorAll('.bg-layer').length;
+      bgIndex = (bgIndex + 1) % totalBgs;
+      switchBackground(bgIndex);
+    }
+
+    // --- 30 秒自動輪播計時 ---
+    setInterval(() => {
+      updateClock();
+
+      if (autoRotate) {
+        secondsElapsed++;
+        if (secondsElapsed % cycleDuration === 0) {
+          nextBackground();
+        }
+      }
+    }, 1000);
+
+    // --- 控制選單邏輯 ---
+    const menuBtn = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const btn24h = document.getElementById('btn24h');
+    const btn12h = document.getElementById('btn12h');
+    const btnPauseBg = document.getElementById('btnPauseBg');
+    const btnNextBg = document.getElementById('btnNextBg');
+    const btnFullscreen = document.getElementById('btnFullscreen');
+    const announcementInput = document.getElementById('announcementInput');
+
+    menuBtn.addEventListener('click', () => drawer.classList.toggle('open'));
+
+    btn24h.addEventListener('click', () => {
+      is24Hour = true;
+      btn24h.classList.add('active');
+      btn12h.classList.remove('active');
+      updateClock();
+    });
+
+    btn12h.addEventListener('click', () => {
+      is24Hour = false;
+      btn12h.classList.add('active');
+      btn24h.classList.remove('active');
+      updateClock();
+    });
+
+    btnPauseBg.addEventListener('click', () => {
+      autoRotate = !autoRotate;
+      btnPauseBg.innerText = autoRotate ? '自動播放' : '已暫停';
+      btnPauseBg.classList.toggle('active', autoRotate);
+    });
+
+    btnNextBg.addEventListener('click', () => {
+      secondsElapsed = 0;
+      nextBackground();
+    });
+
+    announcementInput.addEventListener('input', (e) => {
+      if (e.target.value.trim() !== '') {
+        announcementTextEl.innerText = e.target.value;
+      }
+    });
+
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        btnFullscreen.innerText = '退出全螢幕';
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+          btnFullscreen.innerText = '開啟全螢幕';
+        }
+      }
+    });
+
+    // 初始化執行
+    updateClock();
+  </script>
+</body>
+</html>
