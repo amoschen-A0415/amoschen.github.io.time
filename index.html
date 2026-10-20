@@ -195,7 +195,7 @@
       transform: scale(1.1);
     }
 
-    /* 位於時鐘窗格右上角的全螢幕解鎖按鈕 */
+    /* 時鐘窗格右上角的全螢幕解鎖按鈕 */
     .lock-trigger-btn {
       position: absolute;
       top: 2.5vh;
@@ -805,7 +805,7 @@
       }
     });
 
-    // 強制請求全螢幕函數
+    // 強制全螢幕函數
     function requestFS() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(() => {});
@@ -822,7 +822,7 @@
       }
     });
 
-    // --- 全螢幕鎖定與防逃脫補鎖機制 ---
+    // --- 全螢幕鎖定與防逃脫自動補鎖機制 ---
     function lockScreen() {
       isLocked = true;
       drawer.classList.remove('open');
@@ -832,11 +832,10 @@
     }
 
     function unlockScreen() {
-      // 在跳出密碼輸入框之前，確保當下全螢幕狀態
       requestFS();
 
       setTimeout(() => {
-        const inputPass = prompt("【防逃脫鎖定保護】\n請輸入管理員解鎖密碼：");
+        const inputPass = prompt("【全螢幕防逃脫保護】\n請輸入管理員解鎖密碼：");
         
         if (inputPass === UNLOCK_PASSWORD) {
           isLocked = false;
@@ -848,9 +847,9 @@
           alert("解鎖成功！");
         } else if (inputPass !== null) {
           alert("密碼錯誤，無法解鎖！");
-          requestFS(); // 輸入錯誤時立刻強制回全螢幕
+          requestFS();
         } else {
-          // 點擊「取消」時：立刻重新補回全螢幕
+          // 點擊「取消」或按 ESC 離開輸入框時：立刻補回全螢幕
           requestFS();
         }
       }, 50);
@@ -859,7 +858,7 @@
     btnLockMode.addEventListener('click', lockScreen);
     lockTriggerBtn.addEventListener('click', unlockScreen);
 
-    // 關鍵修復：監聽瀏覽器全螢幕狀態變化 (如果使用者按 ESC/F11 強行離開，0.1秒內立刻重新補回全螢幕)
+    // 監聽全螢幕狀態變化：當按 ESC 被瀏覽器退出時，0.1 秒內自動再次進入全螢幕
     document.addEventListener('fullscreenchange', () => {
       if (isLocked && !document.fullscreenElement) {
         setTimeout(() => {
@@ -868,14 +867,14 @@
       }
     });
 
-    // 鎖定狀態下：只要點擊或滑動畫面任何地方，自動再次嘗試補全螢幕
+    // 鎖定狀態下，點擊畫面上任何區域自動補全螢幕
     window.addEventListener('click', () => {
       if (isLocked && !document.fullscreenElement) {
         requestFS();
       }
     });
 
-    // 防鍵盤快捷鍵離場 (攔截 F11, ESC)
+    // 防按鍵快捷離場 (F11 / ESC)
     window.addEventListener('keydown', (e) => {
       if (isLocked) {
         if (e.key === 'F11' || e.key === 'Escape' || e.keyCode === 122 || e.keyCode === 27) {
