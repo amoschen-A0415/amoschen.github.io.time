@@ -195,32 +195,6 @@
       transform: scale(1.1);
     }
 
-    /* 時鐘窗格右上角的全螢幕解鎖按鈕 */
-    .lock-trigger-btn {
-      position: absolute;
-      top: 2.5vh;
-      right: 2.5vw;
-      z-index: 70;
-      background: rgba(180, 40, 40, 0.85);
-      border: 2px solid rgba(255, 120, 120, 0.8);
-      color: white;
-      padding: 10px 22px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: clamp(1.2rem, 2.5vh, 1.8rem);
-      font-weight: 900;
-      display: none;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-    }
-
-    .lock-trigger-btn:hover {
-      background: #E53935;
-      transform: scale(1.08);
-      box-shadow: 0 0 25px rgba(229, 57, 53, 0.8);
-    }
-
     .alarm-icons-container { display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
     .alarm-icon-item {
       font-size: clamp(2.5rem, 6vh, 4.5rem);
@@ -392,9 +366,8 @@
       <input type="text" id="announcementInput" class="input-field" placeholder="範例：歡迎參加社團法人中華安得烈慈善協會感恩禮拜">
     </div>
 
-    <div class="control-group" style="margin-top: auto; padding-top: 10px; gap: 10px;">
+    <div class="control-group" style="margin-top: auto; padding-top: 10px;">
       <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
-      <button class="btn" id="btnLockMode" style="background: #D32F2F; color: #FFF;">🔒 鎖定全螢幕 (需密碼解鎖)</button>
     </div>
   </div>
 
@@ -472,9 +445,6 @@
 
     <main class="main-clock-card">
       <div class="ampm-tag" id="ampmTag" title="點擊切換 12/24 小時制">24H</div>
-
-      <!-- 時鐘窗格右上角的全螢幕解鎖按鈕 -->
-      <button class="lock-trigger-btn" id="lockTriggerBtn">🔒 已進入鎖定模式 (點擊解鎖)</button>
 
       <div class="time-wrapper">
         <div class="time-hm">
@@ -561,10 +531,6 @@
     let alarms = [];
     let ringingTimers = {};
     let isCustomAnnouncementActive = false;
-
-    // 全螢幕鎖定狀態與內建解鎖密碼
-    let isLocked = false;
-    const UNLOCK_PASSWORD = "26328803";
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -774,8 +740,6 @@
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const btnFullscreen = document.getElementById('btnFullscreen');
-    const btnLockMode = document.getElementById('btnLockMode');
-    const lockTriggerBtn = document.getElementById('lockTriggerBtn');
     const btnAddAlarm = document.getElementById('btnAddAlarm');
     const btnTestSound = document.getElementById('btnTestSound');
     const alarmLabelInput = document.getElementById('alarmLabelInput');
@@ -805,89 +769,14 @@
       }
     });
 
-    // 強制全螢幕函數
-    function requestFS() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-    }
-
     btnFullscreen.addEventListener('click', () => {
       if (!document.fullscreenElement) {
-        requestFS();
+        document.documentElement.requestFullscreen().catch(() => {});
         btnFullscreen.innerText = '退出全螢幕';
       } else if (document.exitFullscreen) {
         document.exitFullscreen();
         btnFullscreen.innerText = '開啟全螢幕';
       }
-    });
-
-    // --- 全螢幕鎖定與防逃脫自動補鎖機制 ---
-    function lockScreen() {
-      isLocked = true;
-      drawer.classList.remove('open');
-      menuBtn.style.display = 'none';
-      lockTriggerBtn.style.display = 'block';
-      requestFS();
-    }
-
-    function unlockScreen() {
-      requestFS();
-
-      setTimeout(() => {
-        const inputPass = prompt("【全螢幕防逃脫保護】\n請輸入管理員解鎖密碼：");
-        
-        if (inputPass === UNLOCK_PASSWORD) {
-          isLocked = false;
-          menuBtn.style.display = 'flex';
-          lockTriggerBtn.style.display = 'none';
-          if (document.fullscreenElement && document.exitFullscreen) {
-            document.exitFullscreen();
-          }
-          alert("解鎖成功！");
-        } else if (inputPass !== null) {
-          alert("密碼錯誤，無法解鎖！");
-          requestFS();
-        } else {
-          // 點擊「取消」或按 ESC 離開輸入框時：立刻補回全螢幕
-          requestFS();
-        }
-      }, 50);
-    }
-
-    btnLockMode.addEventListener('click', lockScreen);
-    lockTriggerBtn.addEventListener('click', unlockScreen);
-
-    // 監聽全螢幕狀態變化：當按 ESC 被瀏覽器退出時，0.1 秒內自動再次進入全螢幕
-    document.addEventListener('fullscreenchange', () => {
-      if (isLocked && !document.fullscreenElement) {
-        setTimeout(() => {
-          requestFS();
-        }, 100);
-      }
-    });
-
-    // 鎖定狀態下，點擊畫面上任何區域自動補全螢幕
-    window.addEventListener('click', () => {
-      if (isLocked && !document.fullscreenElement) {
-        requestFS();
-      }
-    });
-
-    // 防按鍵快捷離場 (F11 / ESC)
-    window.addEventListener('keydown', (e) => {
-      if (isLocked) {
-        if (e.key === 'F11' || e.key === 'Escape' || e.keyCode === 122 || e.keyCode === 27) {
-          e.preventDefault();
-          e.stopPropagation();
-          requestFS();
-          return false;
-        }
-      }
-    }, true);
-
-    window.addEventListener('contextmenu', (e) => {
-      if (isLocked) e.preventDefault();
     });
 
     initAlarmSelects();
