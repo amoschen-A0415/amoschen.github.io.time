@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>社團法人中華安得烈慈善協會 - 全螢幕大字體數位時鐘</title>
+  <title>安得烈食物銀行全螢幕數位時鐘</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
@@ -94,7 +94,6 @@
 
     .brand-section { display: flex; align-items: center; gap: 28px; }
     
-    /* 重新設計的安得烈官方 Logo 容器 */
     .official-logo-box {
       height: 110px;
       display: flex;
@@ -172,7 +171,6 @@
       text-shadow: 0 0 25px rgba(245, 166, 35, 0.7);
     }
 
-    /* 12H/24H 互動標籤 */
     .ampm-tag {
       position: absolute;
       top: 2.5vh; left: 2.5vw;
@@ -206,7 +204,6 @@
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* 鬧鐘響鈴時不顯示彈窗，但鬧鐘圖示放大 3 倍並劇烈動態提醒點擊 */
     .alarm-icon-item.ringing {
       font-size: clamp(8rem, 20vh, 16vw) !important;
       animation: alarmRinging 0.2s infinite alternate !important;
@@ -252,7 +249,6 @@
     .quote-text { font-size: clamp(1.8rem, 3.2vh, 2.6rem); font-weight: 700; color: #E2EFFC; letter-spacing: 1.5px; line-height: 1.35; transition: opacity 0.5s ease; }
     .announcement-text { font-size: clamp(2.8rem, 5vh, 4.2rem); font-weight: 900; color: var(--warm-amber); margin-top: 8px; letter-spacing: 2px; text-shadow: 0 3px 12px rgba(0,0,0,0.8); line-height: 1.2; }
 
-    /* 自訂公告全版模式 (字體 350% 顯眼清晰防模糊) */
     .quote-box.custom-active .quote-text { display: none; }
     .quote-box.custom-active .announcement-text {
       font-size: clamp(5.5rem, 12vh, 10.5rem);
@@ -261,7 +257,6 @@
       margin-top: 0;
       text-align: center;
       letter-spacing: 4px;
-      /* 清晰硬邊陰影，解決深色背景上的毛邊模糊感 */
       text-shadow: 
         0 4px 0 #000,
         0 -4px 0 #000,
@@ -276,7 +271,6 @@
       50% { opacity: 0.7; }
     }
 
-    /* 右下角純右箭頭按鈕 */
     .bg-switch-btn {
       position: absolute; right: 1.5vw; bottom: 1.5vh; z-index: 30;
       background: rgba(0, 30, 60, 0.75); border: 2px solid var(--accent-gold); color: var(--accent-gold);
@@ -325,14 +319,44 @@
     .alarm-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--accent-gold); }
     .alarm-time-label { font-size: 0.95rem; font-weight: bold; color: #FFF; }
     .alarm-delete-btn { background: #ff4d4d; border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+
+    /* 全螢幕鎖定控制按鈕 */
+    .lock-trigger-btn {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+      background: rgba(180, 40, 40, 0.7);
+      border: 1px solid rgba(255, 100, 100, 0.5);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: none; /* 鎖定時顯示 */
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .lock-trigger-btn:hover {
+      background: #ff3333;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
 
+  <!-- 控制面板觸發鈕 -->
   <button class="menu-btn" id="menuToggle">⚙️</button>
 
+  <!-- 鎖定狀態下的解鎖觸發鈕 -->
+  <button class="lock-trigger-btn" id="lockTriggerBtn">🔒 已進入鎖定模式 (點擊解鎖)</button>
+
+  <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
-    <div class="drawer-title">顯示與鬧鐘設定</div>
+    <div class="drawer-title">安得烈食物銀行全螢幕數位時鐘</div>
 
     <div class="control-group">
       <div class="control-label">新增鬧鐘設定 (下拉選單)</div>
@@ -370,8 +394,9 @@
       <input type="text" id="announcementInput" class="input-field" placeholder="範例：歡迎參加社團法人中華安得烈慈善協會感恩禮拜">
     </div>
 
-    <div class="control-group" style="margin-top: auto; padding-top: 10px;">
+    <div class="control-group" style="margin-top: auto; padding-top: 10px; gap: 10px;">
       <button class="btn" id="btnFullscreen" style="background: var(--accent-gold); color: #000;">開啟全螢幕</button>
+      <button class="btn" id="btnLockMode" style="background: #D32F2F; color: #FFF;">🔒 鎖定全螢幕 (需密碼解鎖)</button>
     </div>
   </div>
 
@@ -413,32 +438,24 @@
   <div class="clock-app-container">
     <header>
       <div class="brand-section">
-        <!-- 參照安得烈官網標誌重繪 (精確比例、間距與三傾斜方塊圖騰) -->
         <div class="official-logo-box">
           <svg width="210" height="110" viewBox="0 0 240 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- 1. 左側：麥穗與稻浪方塊 (咖啡色) -->
             <g transform="translate(10, 15) rotate(-8, 45, 45)">
               <rect x="0" y="0" width="82" height="82" rx="10" fill="#8C531B"/>
-              <!-- 麥穗主幹 -->
               <path d="M 18 70 C 35 50 55 30 70 12" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" fill="none"/>
-              <!-- 麥穗葉粒 -->
               <path d="M 30 52 Q 16 44 18 34 Q 32 40 35 48 Z" fill="#FFFFFF"/>
               <path d="M 38 45 Q 52 38 54 28 Q 40 31 36 42 Z" fill="#FFFFFF"/>
               <path d="M 45 35 Q 31 27 33 17 Q 47 23 48 32 Z" fill="#FFFFFF"/>
               <path d="M 52 28 Q 66 18 68 8 Q 54 11 49 24 Z" fill="#FFFFFF"/>
             </g>
 
-            <!-- 2. 右上：愛心與和平雙手方塊 (綠色) -->
             <g transform="translate(125, 5) rotate(8, 45, 45)">
               <rect x="0" y="0" width="82" height="82" rx="10" fill="#7FA827"/>
-              <!-- 愛心圖案 -->
               <path d="M 41 68 C 22 50 10 35 26 22 C 38 12 41 26 41 26 C 41 26 44 12 56 22 C 72 35 60 50 41 68 Z" fill="#FFFFFF"/>
             </g>
 
-            <!-- 3. 左下：小魚與慈善方塊 (金褐色) -->
             <g transform="translate(45, 68) rotate(-12, 40, 40)">
               <rect x="0" y="0" width="76" height="76" rx="10" fill="#A06822"/>
-              <!-- 聖經魚形標誌 (Ichthys) -->
               <path d="M 15 38 Q 38 12 65 38 Q 38 64 15 38 Z" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
               <path d="M 18 38 L 5 22 M 18 38 L 5 54" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
             </g>
@@ -527,7 +544,7 @@
       "「我留下平安給你們；我將我的平安賜給你們。」— 約翰福音 14:27",
       "「神是我們的避難所，是我們的力量，是我們在患難中隨時的幫助。」— 詩篇 46:1",
       "「堅心倚賴你的，你必保守他十分平安，因為他倚靠你。」— 以賽亞書 26:3",
-      "「凡事謙虛、溫柔, 忍耐，用愛心互相寬容。」— 以弗所書 4:2",
+      "「凡事謙虛、溫柔、忍耐，用愛心互相寬容。」— 以弗所書 4:2",
       "「主是我在急難中的力量，是我心中的磐石。」— 詩篇 73:26",
       "「要彼此相愛，像我愛你們一樣；這是我的命令。」— 約翰福音 15:12",
       "「主的恩典乃是一生之久；一宿雖有哭泣，早晨便必歡呼。」— 詩篇 30:5",
@@ -540,8 +557,12 @@
     const cycleDuration = 30;
     let secondsElapsed = 0;
     let alarms = [];
-    let ringingTimers = {}; // 改為物件紀錄每個響鈴中的鬧鐘計時器
+    let ringingTimers = {};
     let isCustomAnnouncementActive = false;
+
+    // 全螢幕鎖定相關狀態與內建密碼
+    let isLocked = false;
+    const UNLOCK_PASSWORD = "26328803";
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -647,7 +668,6 @@
     ampmTag.addEventListener('click', toggleTimeFormat);
     ampmTag.addEventListener('touchstart', toggleTimeFormat, {passive: true});
 
-    // 觸發鬧鐘（不跳彈窗，透過圖示放大 3 倍與紅光動畫提醒點擊關閉）
     function triggerAlarm(alarm) {
       alarm.triggered = true;
       const iconEl = document.getElementById(`alarm-icon-${alarm.id}`);
@@ -697,8 +717,6 @@
         icon.id = `alarm-icon-${alarm.id}`;
         icon.innerText = '⏰';
         icon.title = `鬧鐘: ${displayTime} ${alarm.label} (點擊即可關閉鬧鐘)`;
-        
-        // 直觀點擊圖示即可直接停止響鈴
         icon.addEventListener('click', () => stopRinging(alarm.id));
         alarmIconsContainer.appendChild(icon);
       });
@@ -754,6 +772,8 @@
     const menuBtn = document.getElementById('menuToggle');
     const drawer = document.getElementById('drawer');
     const btnFullscreen = document.getElementById('btnFullscreen');
+    const btnLockMode = document.getElementById('btnLockMode');
+    const lockTriggerBtn = document.getElementById('lockTriggerBtn');
     const btnAddAlarm = document.getElementById('btnAddAlarm');
     const btnTestSound = document.getElementById('btnTestSound');
     const alarmLabelInput = document.getElementById('alarmLabelInput');
@@ -783,6 +803,7 @@
       }
     });
 
+    // 全螢幕切換
     btnFullscreen.addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -790,6 +811,55 @@
       } else if (document.exitFullscreen) {
         document.exitFullscreen();
         btnFullscreen.innerText = '開啟全螢幕';
+      }
+    });
+
+    // --- 全螢幕鎖定功能實作 ---
+    function lockScreen() {
+      isLocked = true;
+      drawer.classList.remove('open');
+      menuBtn.style.display = 'none';
+      lockTriggerBtn.style.display = 'block';
+
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function unlockScreen() {
+      const inputPass = prompt("請輸入管理員解鎖密碼：");
+      if (inputPass === UNLOCK_PASSWORD) {
+        isLocked = false;
+        menuBtn.style.display = 'flex';
+        lockTriggerBtn.style.display = 'none';
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+        alert("解鎖成功！");
+      } else if (inputPass !== null) {
+        alert("密碼錯誤，無法解鎖！");
+      }
+    }
+
+    btnLockMode.addEventListener('click', lockScreen);
+    lockTriggerBtn.addEventListener('click', unlockScreen);
+
+    // 攔截鍵盤按鍵（防 F11 / ESC / F12 等快捷鍵離場）
+    window.addEventListener('keydown', (e) => {
+      if (isLocked) {
+        // 阻止 F11, ESC, Alt+Tab 等關鍵離場按鍵
+        if (e.key === 'F11' || e.key === 'Escape' || e.keyCode === 122 || e.keyCode === 27) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }
+    }, true);
+
+    // 鎖定狀態下防止右鍵選單
+    window.addEventListener('contextmenu', (e) => {
+      if (isLocked) {
+        e.preventDefault();
       }
     });
 
