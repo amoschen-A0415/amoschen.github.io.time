@@ -195,6 +195,32 @@
       transform: scale(1.1);
     }
 
+    /* 位於時鐘窗格右上角的全螢幕解鎖按鈕 */
+    .lock-trigger-btn {
+      position: absolute;
+      top: 2.5vh;
+      right: 2.5vw;
+      z-index: 70;
+      background: rgba(180, 40, 40, 0.85);
+      border: 2px solid rgba(255, 120, 120, 0.8);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: clamp(1.2rem, 2.5vh, 1.8rem);
+      font-weight: 900;
+      display: none; /* 預設隱藏，僅在鎖定模式啟用 */
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .lock-trigger-btn:hover {
+      background: #E53935;
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(229, 57, 53, 0.8);
+    }
+
     .alarm-icons-container { display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
     .alarm-icon-item {
       font-size: clamp(2.5rem, 6vh, 4.5rem);
@@ -319,40 +345,12 @@
     .alarm-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--accent-gold); }
     .alarm-time-label { font-size: 0.95rem; font-weight: bold; color: #FFF; }
     .alarm-delete-btn { background: #ff4d4d; border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
-
-    /* 全螢幕鎖定控制按鈕 */
-    .lock-trigger-btn {
-      position: fixed;
-      top: 20px;
-      right: 80px;
-      z-index: 100;
-      background: rgba(180, 40, 40, 0.7);
-      border: 1px solid rgba(255, 100, 100, 0.5);
-      color: white;
-      padding: 10px 18px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      font-weight: bold;
-      display: none; /* 鎖定時顯示 */
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-    }
-
-    .lock-trigger-btn:hover {
-      background: #ff3333;
-      transform: scale(1.05);
-    }
   </style>
 </head>
 <body>
 
   <!-- 控制面板觸發鈕 -->
   <button class="menu-btn" id="menuToggle">⚙️</button>
-
-  <!-- 鎖定狀態下的解鎖觸發鈕 -->
-  <button class="lock-trigger-btn" id="lockTriggerBtn">🔒 已進入鎖定模式 (點擊解鎖)</button>
 
   <!-- 側邊控制面板 -->
   <div class="drawer" id="drawer">
@@ -474,6 +472,10 @@
 
     <main class="main-clock-card">
       <div class="ampm-tag" id="ampmTag" title="點擊切換 12/24 小時制">24H</div>
+
+      <!-- 時鐘窗格右上角的解鎖觸發鈕 -->
+      <button class="lock-trigger-btn" id="lockTriggerBtn">🔒 已進入鎖定模式 (點擊解鎖)</button>
+
       <div class="time-wrapper">
         <div class="time-hm">
           <span id="hours">09</span>
@@ -560,7 +562,7 @@
     let ringingTimers = {};
     let isCustomAnnouncementActive = false;
 
-    // 全螢幕鎖定相關狀態與內建密碼
+    // 全螢幕鎖定相關狀態與預設密碼
     let isLocked = false;
     const UNLOCK_PASSWORD = "26328803";
 
@@ -803,7 +805,6 @@
       }
     });
 
-    // 全螢幕切換
     btnFullscreen.addEventListener('click', () => {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -814,7 +815,7 @@
       }
     });
 
-    // --- 全螢幕鎖定功能實作 ---
+    // 鎖定模式控制
     function lockScreen() {
       isLocked = true;
       drawer.classList.remove('open');
@@ -844,10 +845,9 @@
     btnLockMode.addEventListener('click', lockScreen);
     lockTriggerBtn.addEventListener('click', unlockScreen);
 
-    // 攔截鍵盤按鍵（防 F11 / ESC / F12 等快捷鍵離場）
+    // 防按鍵退出全螢幕 (F11 / ESC)
     window.addEventListener('keydown', (e) => {
       if (isLocked) {
-        // 阻止 F11, ESC, Alt+Tab 等關鍵離場按鍵
         if (e.key === 'F11' || e.key === 'Escape' || e.keyCode === 122 || e.keyCode === 27) {
           e.preventDefault();
           e.stopPropagation();
@@ -856,11 +856,8 @@
       }
     }, true);
 
-    // 鎖定狀態下防止右鍵選單
     window.addEventListener('contextmenu', (e) => {
-      if (isLocked) {
-        e.preventDefault();
-      }
+      if (isLocked) e.preventDefault();
     });
 
     initAlarmSelects();
